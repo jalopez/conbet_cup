@@ -20,10 +20,6 @@ class Group(models.Model):
 
 class Match(models.Model):
     id = models.CharField(max_length=2, primary_key=True)
-    competing = models.ForeignKey(Team, related_name='competing_match',
-                null=True)
-    visiting  = models.ForeignKey(Team, related_name='visiting_match', 
-                null=True)
     date = models.DateTimeField(null=True)
     group = models.ForeignKey(Group, null=True)
     location = models.CharField(max_length=50, null=True)
@@ -65,6 +61,10 @@ class Result(models.Model):
         ('V', 'Visitor'),
         ('T', 'Tie'),
     )
+    competing = models.ForeignKey(Team, related_name='competing_match',
+                null=True)
+    visiting  = models.ForeignKey(Team, related_name='visiting_match', 
+                null=True)
     competing_goals = models.IntegerField()
     visiting_goals = models.IntegerField()
     winner = models.CharField(max_length=1, blank=False, choices=RESULT_CHOICES)
