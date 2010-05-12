@@ -13,6 +13,7 @@ class Group(models.Model):
 
 
 class Match(models.Model):
+    id = models.CharField(max_length=2, primary_key=True)
     competing = models.ForeignKey(Team, related_name='competing_match',
                 null=True)
     visiting  = models.ForeignKey(Team, related_name='visiting_match', 
@@ -23,8 +24,8 @@ class Match(models.Model):
 
 
 class Round(models.Model):
-    # 1 for the final, 2 for semi-final, 3 for quarter-finals...
-    stage = models.IntegerField()
+    # F for the final, S for semi-final, Q for quarter-finals...
+    stage = models.CharField(max_length=1, blank=False)
     order = models.IntegerField() 
     match = models.ForeignKey(Match)
     qualify_for = models.ForeignKey('self', null=True)
