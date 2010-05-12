@@ -12,7 +12,7 @@ class Group(models.Model):
 class Team(models.Model):
     code = models.CharField(max_length=2, primary_key=True)
     name = models.CharField(max_length=40, blank=False)
-    coefficient = models.FloatField()
+    coefficient = models.FloatField(null=True)
     group = models.ForeignKey(Group)
     group_order = models.IntegerField()
 
@@ -20,25 +20,42 @@ class Team(models.Model):
         return self.name
 
 
-class Match(models.Model):
-    id = models.CharField(max_length=2, primary_key=True)
+class Result(models.Model):
+    RESULT_CHOICES = (
+        ('H', 'Home'),
+        ('V', 'Visitor'),
+        ('T', 'Tie'),
+    )
+    home_goals = models.IntegerField(null=True)
+    visitor_goals = models.IntegerField(null=True)
+    winner = models.CharField(max_length=1, null=True, choices=RESULT_CHOICES)
+
+    class Meta:
+        abstract = True
+
+
+class Match(Result):
     date = models.DateTimeField(null=True)
-    group = models.ForeignKey(Group, null=True)
     location = models.CharField(max_length=50, null=True)
+    group = models.ForeignKey(Group, null=True)
+    home = models.ForeignKey(Team, null=True, related_name='home_match')
+    visitor = models.ForeignKey(Team, null=True, related_name='visitor_match')
 
     def __unicode__(self):
-        return self.id
+        return str(self.id)
 
+class Bet(Result):
+    owner = models.ForeignKey(User)
+    match = models.ForeignKey(Match)
 
 class Round(models.Model):
-    id = models.CharField(max_length=2, primary_key=True)
     # F for the final, S for semi-final, Q for quarter-finals...
     stage = models.CharField(max_length=1, blank=False)
     order = models.IntegerField() 
     match = models.ForeignKey(Match)
 
     def __unicode__(self):
-        return self.id
+        return "%s%s" % (self.stage, self.order)
 
 
 class Qualification(models.Model):
@@ -55,14 +72,3 @@ class Qualification(models.Model):
     def __unicode__(self):
         return "%s (%s)" % (self.qualify_for.id, self.side)
 
-class Result(models.Model):
-    owner = models.ForeignKey(User)
-    match = models.ForeignKey(Match)
-    RESULT_CHOICES = (
-        ('H', 'Home'),
-        ('V', 'Visitor'),
-        ('T', 'Tie'),
-    )
-    home_goals = models.IntegerField()
-    visitor_goals = models.IntegerField()
-    winner = models.CharField(max_length=1, blank=False, choices=RESULT_CHOICES)

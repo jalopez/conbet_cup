@@ -1,4 +1,14 @@
 world_cup = {
+    'group_matches': {
+        'fifa': [
+            (1, 2),
+            (3, 4),
+            (4, 2),
+            (1, 3),
+            (2, 3),
+            (4, 1),
+        ],
+    },
     'groups': ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
     'rounds': [
         # (round, competing, visiting)
