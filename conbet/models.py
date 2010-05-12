@@ -2,17 +2,19 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Team(models.Model):
-    code = models.CharField(max_length=2, primary_key=True)
-    name = models.CharField(max_length=40, blank=False)
-    coefficient = models.FloatField()
+class Group(models.Model):
+    name = models.CharField(max_length=15, primary_key=True)
 
     def __unicode__(self):
         return self.name
 
 
-class Group(models.Model):
-    name = models.CharField(max_length=15, primary_key=True)
+class Team(models.Model):
+    code = models.CharField(max_length=2, primary_key=True)
+    name = models.CharField(max_length=40, blank=False)
+    coefficient = models.FloatField()
+    group = models.ForeignKey(Group)
+    group_order = models.IntegerField()
 
     def __unicode__(self):
         return self.name
@@ -61,10 +63,6 @@ class Result(models.Model):
         ('V', 'Visitor'),
         ('T', 'Tie'),
     )
-    home = models.ForeignKey(Team, related_name='home_match',
-                null=True)
-    visitor  = models.ForeignKey(Team, related_name='visitor_match', 
-                null=True)
     home_goals = models.IntegerField()
     visitor_goals = models.IntegerField()
     winner = models.CharField(max_length=1, blank=False, choices=RESULT_CHOICES)
