@@ -7,9 +7,15 @@ class Team(models.Model):
     name = models.CharField(max_length=40, blank=False)
     coefficient = models.FloatField()
 
+    def __unicode__(self):
+        return self.name
+
 
 class Group(models.Model):
     name = models.CharField(max_length=15, primary_key=True)
+
+    def __unicode__(self):
+        return self.name
 
 
 class Match(models.Model):
@@ -22,6 +28,9 @@ class Match(models.Model):
     group = models.ForeignKey(Group, null=True)
     location = models.CharField(max_length=50, null=True)
 
+    def __unicode__(self):
+        return self.id
+
 
 class Round(models.Model):
     id = models.CharField(max_length=2, primary_key=True)
@@ -29,6 +38,9 @@ class Round(models.Model):
     stage = models.CharField(max_length=1, blank=False)
     order = models.IntegerField() 
     match = models.ForeignKey(Match)
+
+    def __unicode__(self):
+        return self.id
 
 
 class Qualification(models.Model):
@@ -42,6 +54,8 @@ class Qualification(models.Model):
     )
     side = models.CharField(blank=False, max_length=1, choices=SIDE_CHOICES)
 
+    def __unicode__(self):
+        return "%s (%s)" % (self.qualify_for.id, self.side)
 
 class Result(models.Model):
     owner = models.ForeignKey(User)
