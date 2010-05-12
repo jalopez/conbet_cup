@@ -50,7 +50,7 @@ class Command(BaseCommand):
                 match=match)
         round.save()
 
-        self.create_qualification (round, 'C', round_info[1])
+        self.create_qualification (round, 'H', round_info[1])
         self.create_qualification (round, 'V', round_info[2])
 
     def create_qualification(self, round, side, origin):

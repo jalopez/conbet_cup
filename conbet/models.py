@@ -45,8 +45,8 @@ class Qualification(models.Model):
     position = models.IntegerField()
     qualify_for = models.ForeignKey(Round, related_name='qualify_for')
     SIDE_CHOICES = (
-        ('C', 'Competing'),
-        ('V', 'Visitor'),
+        ('H', 'Home team'),
+        ('V', 'Visitor team'),
     )
     side = models.CharField(blank=False, max_length=1, choices=SIDE_CHOICES)
 
@@ -57,14 +57,14 @@ class Result(models.Model):
     owner = models.ForeignKey(User)
     match = models.ForeignKey(Match)
     RESULT_CHOICES = (
-        ('C', 'Competing'),
+        ('H', 'Home'),
         ('V', 'Visitor'),
         ('T', 'Tie'),
     )
-    competing = models.ForeignKey(Team, related_name='competing_match',
+    home = models.ForeignKey(Team, related_name='home_match',
                 null=True)
-    visiting  = models.ForeignKey(Team, related_name='visiting_match', 
+    visitor  = models.ForeignKey(Team, related_name='visitor_match', 
                 null=True)
-    competing_goals = models.IntegerField()
-    visiting_goals = models.IntegerField()
+    home_goals = models.IntegerField()
+    visitor_goals = models.IntegerField()
     winner = models.CharField(max_length=1, blank=False, choices=RESULT_CHOICES)
