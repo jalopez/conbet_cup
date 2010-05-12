@@ -24,17 +24,23 @@ class Match(models.Model):
 
 
 class Round(models.Model):
+    id = models.CharField(max_length=2, primary_key=True)
     # F for the final, S for semi-final, Q for quarter-finals...
     stage = models.CharField(max_length=1, blank=False)
     order = models.IntegerField() 
     match = models.ForeignKey(Match)
-    qualify_for = models.ForeignKey('self', null=True)
 
 
-class GroupQualification(models.Model):
-    group = models.ForeignKey(Group)
+class Qualification(models.Model):
+    group = models.ForeignKey(Group, null=True)
+    round = models.ForeignKey(Round, null=True, related_name='round')
     position = models.IntegerField()
-    qualify_for = models.ForeignKey(Round)
+    qualify_for = models.ForeignKey(Round, related_name='qualify_for')
+    SIDE_CHOICES = (
+        ('C', 'Competing'),
+        ('V', 'Visitor'),
+    )
+    side = models.CharField(blank=False, max_length=1, choices=SIDE_CHOICES)
 
 
 class Result(models.Model):
