@@ -39,6 +39,9 @@ class RoundAdmin(admin.ModelAdmin):
         
 admin.site.register(Round, RoundAdmin)
 
-admin.site.register(Team)
+class TeamAdmin(admin.ModelAdmin):
+    ordering = ('name',)
+
+admin.site.register(Team, TeamAdmin)
 admin.site.register(Qualification)
 admin.site.register(Bet)
