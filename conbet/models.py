@@ -37,26 +37,29 @@ class Result(models.Model):
 class Match(Result):
     date = models.DateTimeField(null=True)
     location = models.CharField(max_length=50, null=True)
-    group = models.ForeignKey(Group, null=True)
     home = models.ForeignKey(Team, null=True, related_name='home_match')
     visitor = models.ForeignKey(Team, null=True, related_name='visitor_match')
 
+
+class GroupMatch(Match):
+    group = models.ForeignKey(Group)
+
     def __unicode__(self):
-        return str(self.id)
+        return "%s - %s" % (self.home, self.visitor)
 
-class Bet(Result):
-    owner = models.ForeignKey(User)
-    match = models.ForeignKey(Match)
 
-class Round(models.Model):
+class Round(Match):
     # F for the final, S for semi-final, Q for quarter-finals...
     stage = models.CharField(max_length=1, blank=False)
     order = models.IntegerField() 
-    match = models.ForeignKey(Match)
 
     def __unicode__(self):
         return "%s%s" % (self.stage, self.order)
 
+
+class Bet(Result):
+    owner = models.ForeignKey(User)
+    match = models.ForeignKey(Match)
 
 class Qualification(models.Model):
     group = models.ForeignKey(Group, null=True)

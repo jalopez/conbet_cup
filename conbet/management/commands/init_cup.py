@@ -4,7 +4,7 @@ from optparse import make_option
 from django.core.management.base import BaseCommand, CommandError
 
 from conbet import cup_templates
-from conbet.models import Group, Match, Round, Qualification, Team
+from conbet.models import Group, GroupMatch, Round, Qualification, Team
 
 
 class Command(BaseCommand):
@@ -59,7 +59,7 @@ class Command(BaseCommand):
             teams.append(team)
 
         for sel in group_order:
-            match = Match(group=group,
+            match = GroupMatch(group=group,
                 home=teams[sel[0] - 1],
                 visitor=teams[sel[1] - 1])
             match.save()
@@ -67,17 +67,12 @@ class Command(BaseCommand):
 
     def create_round(self, round_info):
         round_name = round_info[0]
-        match = Match()
-        match.save()
-
-        #import ipdb;
-        #if round_name[1] == 'O1':
-        #    ipdb.set_trace()
-        round = Round(stage=round_name[0], order=int(round_name[1]), match=match)
+        round = Round(stage=round_name[0], order=int(round_name[1]))
         round.save()
 
         self.create_qualification (round, 'H', round_info[1])
         self.create_qualification (round, 'V', round_info[2])
+
 
     def create_qualification(self, round, side, origin):
         if type(origin) == tuple:
