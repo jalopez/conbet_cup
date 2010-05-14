@@ -51,12 +51,13 @@ class Command(BaseCommand):
         group.save()
 
         teams = []
-        i = 0
+        i = 1
         for (team_code, team_name) in self.teams[group_name]:
             team = Team(code=team_code, name=team_name, group=group,
-                        group_order=++i)
+                        group_order=i)
             team.save()
             teams.append(team)
+            i+=1
 
         for sel in group_order:
             match = GroupMatch(group=group,
@@ -65,9 +66,15 @@ class Command(BaseCommand):
             match.save()
 
 
+    def parse_round_name(self, round_name):
+        stage = self.template['stages'][round_name[0]]
+        order = round_name[1]
+        return (stage, order)
+
+
     def create_round(self, round_info):
-        round_name = round_info[0]
-        round = Round(stage=round_name[0], order=int(round_name[1]))
+        (stage, order) = self.parse_round_name(round_info[0])
+        round = Round(stage=stage, order=order)
         round.save()
 
         self.create_qualification (round, 'H', round_info[1])
@@ -87,8 +94,8 @@ class Command(BaseCommand):
         if name in self.template['groups']:
             qualification.group = Group.objects.get(name=name)
         else:
-            qualification.round = Round.objects.get(stage=name[0],
-                                                    order=int(name[1]))
+            (stage, order) = self.parse_round_name(name)
+            qualification.round = Round.objects.get(stage=stage, order=order)
         qualification.save()
 
     def parse_teams(self, teams_file):

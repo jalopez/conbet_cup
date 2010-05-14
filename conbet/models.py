@@ -7,7 +7,9 @@ class Group(models.Model):
 
     def __unicode__(self):
         return self.name
-
+    
+    def matches(self):
+        return self.groupmatch_set.all().order_by('date')
 
 class Team(models.Model):
     code = models.CharField(max_length=2, primary_key=True)
@@ -49,8 +51,8 @@ class GroupMatch(Match):
 
 
 class Round(Match):
-    # F for the final, S for semi-final, Q for quarter-finals...
-    stage = models.CharField(max_length=1, blank=False)
+    # 1 for the final, 2 for semi-final, 3 for quarter-finals...
+    stage = models.IntegerField()
     order = models.IntegerField() 
 
     def __unicode__(self):

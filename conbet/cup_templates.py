@@ -1,4 +1,10 @@
 world_cup = {
+    'stages' : {
+        'F': 1,
+        'S': 2,
+        'Q': 3,
+        'O': 4,
+    },
     'group_matches': {
         'fifa': [
             (1, 2),
