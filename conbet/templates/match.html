@@ -1,0 +1,24 @@
+{% load filters %}
+<div class="match">
+        <div class="month">{{ match.date.month }}</div>
+        <div class="day">{{ match.date.day }}</div>
+        <div class="hour">{{ match.date|date:"H:i" }}</div>
+        <div class="location">{{ match.location|default:"--" }}</div>
+        <div class="teams"> {{ match.home|default:"--" }} - 
+            {{ match.visitor|default:"--" }} </div>
+        <div class="results">
+                <input type="checkbox" id="{{ match.id }}_h_win"/>
+                <select id="{{ match.id }}_h">
+                {% for value in valid_goals %}
+                        <option value="{{ value }}">{{ value }}</option>
+                {% endfor %}
+                </select>
+                -
+                <select id="{{ match.id }}_v">
+                {% for value in valid_goals %}
+                        <option value="{{ value }}">{{ value }}</option>
+                {% endfor %}
+                </select>
+                <input type="checkbox" id="{{ match.id }}_v_win"/>
+        </div>
+</div>
