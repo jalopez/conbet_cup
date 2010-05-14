@@ -9,7 +9,7 @@ class Group(models.Model):
         return self.name
     
     def matches(self):
-        return self.groupmatch_set.all().order_by('date')
+        return self.groupmatch_set.all().order_by('date', 'id')
 
 class Team(models.Model):
     code = models.CharField(max_length=2, primary_key=True)

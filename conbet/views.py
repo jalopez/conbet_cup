@@ -6,7 +6,7 @@ from django.http import Http404, HttpResponse, HttpResponseServerError
 from django.shortcuts import get_list_or_404, get_object_or_404, render_to_response
 from django.contrib.auth.models import User
 
-from conbet.models import Match, Bet, GroupMatch, Round
+from conbet.models import Match, Bet, GroupMatch, Round, Group
 
 @login_required
 def index(request):
@@ -23,12 +23,25 @@ def ranking(request):
 def edit_bet(request):
     if request.method == 'POST':
         update_bet(request)
-    return show_user_bet(request.user, True) 
+    return bet(request, request.user.username, editable=True) 
 
 @login_required
-def bet(request, username):
+def bet(request, username, editable=False):
     user = get_object_or_404(User, username=username)
-    return show_user_bet(user, False)
+
+    stages = Round.objects.values('stage').distinct().order_by('-stage')
+    round_matches = {}
+    for s in stages:
+        stage = s['stage']
+        matches = Round.objects.filter(stage=stage).order_by('order')
+        round_matches[stage] = matches
+
+    return render_to_response('bet.html', {
+        'groups': Group.objects.all().order_by('name'),
+        'bets': Bet.objects.filter(owner=user),
+        'round_matches': round_matches, 
+        'editable': editable,
+    })
 
 @login_required
 def results(request):
@@ -36,12 +49,6 @@ def results(request):
 
 ### Aux functions
 
-def show_user_bet(user, editable):
-    bets = Bet.objects.filter(owner=user)
-    group_matches = GroupMatch.objects.all().order_by('group__name', 'date')
-    rounds = Round.objects.all().order_by('stage', 'order')
-    return render_to_response('bet.html', {'bets': bets, 'group_matches':
-         group_matches, 'round_matches': rounds, 'editable': editable})
 
 def update_bet(request):
     try:
