@@ -28,17 +28,17 @@ class Result(models.Model):
         ('V', 'Visitor'),
         ('T', 'Tie'),
     )
-    home_goals = models.IntegerField(null=True)
-    visitor_goals = models.IntegerField(null=True)
-    winner = models.CharField(max_length=1, null=True, choices=RESULT_CHOICES)
+    home_goals = models.IntegerField(null=True, blank=True)
+    visitor_goals = models.IntegerField(null=True, blank=True)
+    winner = models.CharField(max_length=1, null=True, blank=True, choices=RESULT_CHOICES)
 
     class Meta:
         abstract = True
 
 
 class Match(Result):
-    date = models.DateTimeField(null=True)
-    location = models.CharField(max_length=50, null=True)
+    date = models.DateTimeField(null=True, blank=True)
+    location = models.CharField(max_length=50, null=True, blank=True)
     home = models.ForeignKey(Team, null=True, related_name='home_match')
     visitor = models.ForeignKey(Team, null=True, related_name='visitor_match')
 

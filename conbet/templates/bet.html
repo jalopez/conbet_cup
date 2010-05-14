@@ -5,11 +5,11 @@
 {% for group in groups %}
   <div class="group">
         <div class="title">{{ group.name }}</div>
-  	<ul>
-  	{% for match in group.matches %}
-  		<li> {{ match.home }} - {{ match.visitor }} </li>
+  	<div class="team_table" id="table_{{ group.name }}">
+	</div>
+	{% for match in group.matches %}
+	{% include "match.html" %}
   	{% endfor %}
-  	</ul>
   </div>
 {% endfor %}
 </div>
@@ -18,11 +18,9 @@
 {% for round in rounds %}
   <div class="round">
         <div class="title">{{ round.0 }}</div>
-  	<ul>
   	{% for match in round.1 %}
-  		<li> {{ match.home }} - {{ match.visitor }} </li>
+	{% include "match.html" %}
   	{% endfor %}
-  	</ul>
   </div>
 {% endfor %}
 </div>
