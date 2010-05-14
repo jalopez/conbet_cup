@@ -55,8 +55,15 @@ class Round(Match):
     stage = models.IntegerField()
     order = models.IntegerField() 
 
+    STAGE_NAMES={
+        1: 'Final',
+        2: 'Semifinal',
+        3: 'Quarter-final',
+        4: 'Round-of-16',
+    }
+
     def __unicode__(self):
-        return "%s%s" % (self.stage, self.order)
+        return "%s %d" % (self.STAGE_NAMES[self.stage], self.order)
 
 
 class Bet(Result):
@@ -76,4 +83,3 @@ class Qualification(models.Model):
 
     def __unicode__(self):
         return "%s (%s)" % (self.qualify_for.id, self.side)
-

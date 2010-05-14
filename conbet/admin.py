@@ -7,7 +7,7 @@ class GroupMatchesInline(admin.TabularInline):
     extra = 0
     fieldsets = (
         ('Match', {
-            'fields': ('home', 'visitor', 'date', 'location'),
+            'fields': ('date', 'location'),
         }),
         ('Results', {
             'fields': ('home_goals', 'visitor_goals', 'winner'),
@@ -24,7 +24,7 @@ class GroupAdmin(admin.ModelAdmin):
 admin.site.register(Group, GroupAdmin)
 
 class RoundAdmin(admin.ModelAdmin):
-    ordering = ('stage', 'order')
+    ordering = ('-stage', 'order')
     fieldsets = (
         (None, {
             'fields': ('stage', 'order'),
