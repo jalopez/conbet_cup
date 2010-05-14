@@ -42,13 +42,14 @@ class Match(Result):
     home = models.ForeignKey(Team, null=True, related_name='home_match')
     visitor = models.ForeignKey(Team, null=True, related_name='visitor_match')
 
+    def __unicode__(self):
+        return str(self.id)
 
 class GroupMatch(Match):
     group = models.ForeignKey(Group)
 
     def __unicode__(self):
         return "%s - %s" % (self.home, self.visitor)
-
 
 class Round(Match):
     # 1 for the final, 2 for semi-final, 3 for quarter-finals...
@@ -69,6 +70,9 @@ class Round(Match):
 class Bet(Result):
     owner = models.ForeignKey(User)
     match = models.ForeignKey(Match)
+
+    def __unicode__(self):
+        return "%s (%s)" % (self.match, self.owner)
 
 class Qualification(models.Model):
     group = models.ForeignKey(Group, null=True)

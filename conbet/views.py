@@ -62,16 +62,14 @@ def results(request):
 
 
 def update_bet(request):
-    try:
-        bet_info = json.loads(request.POST.get('bets'))
-        for (match_id, match_info) in bet_info.items():
-            match = Match.objects.get(id=match_id)
+    bet_info = json.loads(request.POST.get('bets'))
+    for (match_id, match_info) in bet_info.items():
+        match = Match.objects.get(id=match_id)
+        try:
             bet = Bet.objects.get(owner=request.user, match=match)
-            if not bet:
-                bet = Bet(owner=request.user, match=match)
-            bet.home_goals = match_info['home_goals']
-            bet.visitor_goals = match_info['visitor_goals']
-            bet.winner = match_info['winner']
-            bet.save()        
-    except e:
-        raise HttpResponseServerError("Something happened %s" % e) 
+        except Bet.DoesNotExist:
+            bet = Bet(owner=request.user, match=match)
+        bet.home_goals = match_info['home_goals']
+        bet.visitor_goals = match_info['visitor_goals']
+        bet.winner = match_info['winner']
+        bet.save()        

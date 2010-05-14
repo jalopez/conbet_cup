@@ -14,6 +14,34 @@ var bets = {
 {% endfor %}
 };
 
+function send() {
+	$H(bets).each(function(pair){
+	     match = pair.key;
+	     data = pair.value;
+             home_goals_id = match + "_h";
+	     visitor_goals_id = match + "_v";
+             data.home_goals = $(home_goals_id).value;
+	     data.visitor_goals = $(visitor_goals_id).value;
+	});
+	
+	
+	var hidden = $("bets");
+	hidden.value = Object.toJSON(bets);
+	return true;
+}
+
+function init() {
+	$H(bets).each(function(pair){
+	     match = pair.key;
+	     data = pair.value;
+             home_goals_id = match + "_h";
+	     visitor_goals_id = match + "_v";
+             $(home_goals_id).value = data.home_goals;
+	     $(visitor_goals_id).value = data.visitor_goals;
+	});
+
+}
+
 {% endblock %}
 
 
@@ -41,4 +69,12 @@ var bets = {
   </div>
 {% endfor %}
 </div>
+{% if editable %}
+{% url conbet.views.index as url %} 
+<form action="{{ url }}" method="post" onsubmit="return send();">
+<input type="hidden" name="bets" id="bets" />
+<input type="submit" value="Send" />
+</form>
+{% endif %}
+
 {% endblock %}

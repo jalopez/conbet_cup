@@ -6,13 +6,20 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Conbet cup</title>
 <style type="text/css"> 
-</style> 
+
+#group_phase input[type="checkbox"]{
+    visibility: hidden;
+}
+</style>
+<script type="text/javascript" 
+    src="http://ajax.googleapis.com/ajax/libs/prototype/1.6.0.2/prototype.js"></script>
+
 <script type="text/javascript">
  {% block script %}
  {% endblock %}
 </script>
 </head> 
-<body> 
+<body onload="init()"> 
  {% block content %}
  {% endblock %}
 </body> 
