@@ -1,5 +1,22 @@
 {% extends "base.html" %}
 {% load filters %}
+
+
+{% block script %}
+
+var bets = {
+{% for bet in bets %}
+{{ bet.match_id }}: { 
+	'home_goals': {{ bet.home_goals|default:"0" }}, 
+	'visitor_goals': {{ bet.visitor_goals|default:"0" }},
+	'winner': '{{ bet.winner|default:"T" }}'
+}{% if not forloop.last %},{% endif %}
+{% endfor %}
+};
+
+{% endblock %}
+
+
 {% block content %}
 <div id="group_phase">
 {% for group in groups %}

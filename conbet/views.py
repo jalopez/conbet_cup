@@ -38,9 +38,17 @@ def bet(request, username, editable=False):
             Round.objects.filter(stage=stage).order_by('order'),
             ])
 
+    bets = []
+    for match in Match.objects.all():
+        try:
+            bet = Bet.objects.get(owner=user, match=match)
+        except Bet.DoesNotExist:
+            bet = Bet(owner=user, match=match)
+        bets.append(bet)
+
     return render_to_response('bet.html', {
         'groups': Group.objects.all().order_by('name'),
-        'bets': Bet.objects.filter(owner=user),
+        'bets': bets,
         'rounds': rounds,
         'valid_goals': range(settings.MAX_GOALS+1),
         'editable': editable,
