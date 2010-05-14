@@ -1,5 +1,8 @@
 # Django settings for conbet_cup project.
 
+BETTING = True
+
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -64,6 +67,9 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'conbet_cup.urls'
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".

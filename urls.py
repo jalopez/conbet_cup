@@ -3,12 +3,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Example:
-    # (r'^conbet_cup/', include('conbet_cup.foo.urls')),
-
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
-    # to INSTALLED_APPS to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
     (r'^admin/', include(admin.site.urls)),
+    (r'^login/', 'admin.contrib.auth.views.login', {'template_name':
+        'login.html'}),
+    (r'^', include('conbet.urls')),
 )
