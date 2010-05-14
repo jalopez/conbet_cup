@@ -41,7 +41,8 @@ def bet(request, username, editable=False):
     return render_to_response('bet.html', {
         'groups': Group.objects.all().order_by('name'),
         'bets': Bet.objects.filter(owner=user),
-        'rounds': rounds, 
+        'rounds': rounds,
+        'valid_goals': range(settings.MAX_GOALS+1),
         'editable': editable,
     })
 

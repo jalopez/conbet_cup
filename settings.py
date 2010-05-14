@@ -1,7 +1,7 @@
 # Django settings for conbet_cup project.
 
 BETTING = True
-
+MAX_GOALS = 10
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
