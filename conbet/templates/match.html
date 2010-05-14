@@ -7,7 +7,7 @@
         <div class="teams"> {{ match.home|default:"--" }} - 
             {{ match.visitor|default:"--" }} </div>
         <div class="results">
-                <input type="checkbox" id="{{ match.id }}_h_win"/>
+                <input type="radio" id="{{ match.id }}_h_win" name="{{ match.id }}_radio"/>
                 <select id="{{ match.id }}_h">
                 {% for value in valid_goals %}
                         <option value="{{ value }}">{{ value }}</option>
@@ -19,6 +19,6 @@
                         <option value="{{ value }}">{{ value }}</option>
                 {% endfor %}
                 </select>
-                <input type="checkbox" id="{{ match.id }}_v_win"/>
+                <input type="radio" id="{{ match.id }}_v_win" name="{{ match.id }}_radio"/>
         </div>
 </div>

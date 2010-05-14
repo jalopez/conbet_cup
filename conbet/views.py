@@ -71,5 +71,10 @@ def update_bet(request):
             bet = Bet(owner=request.user, match=match)
         bet.home_goals = match_info['home_goals']
         bet.visitor_goals = match_info['visitor_goals']
-        bet.winner = match_info['winner']
+        if bet.home_goals > bet.visitor_goals:
+            bet.winner = 'H'
+        elif bet.home_goals < bet.visitor_goals:
+            bet.winner = 'V'
+        else:
+            bet.winner = match_info['winner']
         bet.save()        

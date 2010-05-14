@@ -9,7 +9,7 @@ var bets = {
 {{ bet.match_id }}: { 
 	'home_goals': {{ bet.home_goals|default:"0" }}, 
 	'visitor_goals': {{ bet.visitor_goals|default:"0" }},
-	'winner': '{{ bet.winner|default:"T" }}'
+	'winner': '{{ bet.winner|default:"H" }}'
 }{% if not forloop.last %},{% endif %}
 {% endfor %}
 };
@@ -20,8 +20,24 @@ function send() {
 	     data = pair.value;
              home_goals_id = match + "_h";
 	     visitor_goals_id = match + "_v";
+             radio_h_id = home_goals_id + "_win";
+	     radio_v_id = visitor_goals_id + "_win";
+             
              data.home_goals = $(home_goals_id).value;
 	     data.visitor_goals = $(visitor_goals_id).value;
+	     
+	     // FIXME: think in a better way of checking if the bet is for the
+	     // first round or not
+	     if ($(radio_h_id).style.visibility != "hidden") {
+                  // Not the first round
+                  if (data.home_goals == data.visitor_goals) {
+                      if ($(radio_h_id).checked) {
+		          data.winner = 'H';
+                      } else {
+		          data.winner = 'V';
+                      }
+                  }
+	     }
 	});
 	
 	
@@ -34,10 +50,25 @@ function init() {
 	$H(bets).each(function(pair){
 	     match = pair.key;
 	     data = pair.value;
+             // Getting the DOM ids for input data
              home_goals_id = match + "_h";
 	     visitor_goals_id = match + "_v";
-             $(home_goals_id).value = data.home_goals;
+             radio_h_id = home_goals_id + "_win";
+	     radio_v_id = visitor_goals_id + "_win";
+             
+	     $(home_goals_id).value = data.home_goals;
 	     $(visitor_goals_id).value = data.visitor_goals;
+	     
+	     // FIXME: think in a better way of checking if the bet is for the
+	     // first round or not
+	     if ($(radio_h_id).style.visibility != "hidden") {
+                  // Not the first round
+                  if (data.winner == 'H') {
+		       $(radio_h_id).checked = true;     
+                  } else {
+                       $(radio_v_id).checked = true;
+		  }
+	     }
 	});
 
 }
