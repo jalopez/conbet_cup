@@ -76,5 +76,9 @@ def update_bet(request):
         elif bet.home_goals < bet.visitor_goals:
             bet.winner = 'V'
         else:
-            bet.winner = match_info['winner']
-        bet.save()        
+            try:
+                group_match = GroupMatch.objects.get(id=match.id)
+                bet.winner = 'T'
+            except GroupMatch.DoesNotExist: 
+                bet.winner = match_info['winner']
+        bet.save()
