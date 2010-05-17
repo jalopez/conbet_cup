@@ -54,6 +54,14 @@ class Match(Result):
         else:
             return None
 
+    def loser_team(self):
+        if self.winner == 'H':
+            return self.visitor
+        elif self.winner == 'V':
+            return self.home
+        else:
+            return None
+
     def __unicode__(self):
         return str(self.id)
 
@@ -110,6 +118,14 @@ class Round(Match):
         4: 'Round-of-16',
     }
 
+    def get_position(self, position):
+        if position == 1:
+            return self.winner_team()
+        elif position == 2:
+            return self.loser_team()
+        else:
+            raise Exception("Out of range")
+
     def __unicode__(self):
         return "%s %d" % (self.STAGE_NAMES[self.stage], self.order)
 
@@ -124,7 +140,21 @@ class Round(Match):
             else:
                 pass # Don't force a winner 
 
+    @staticmethod
+    def on_save(sender, **kwargs):
+        instance = kwargs['instance']
+
+        for q in Qualification.objects.filter(round=instance):
+            round = q.qualify_for
+            team = instance.get_position(q.position) 
+            if q.side == 'H':
+                round.home = team
+            else:
+                round.visitor = team
+            round.save()
+
 pre_save.connect(Round.before_save, sender=Round)
+post_save.connect(Round.on_save, sender=Round)
 
 
 class Bet(Result):
