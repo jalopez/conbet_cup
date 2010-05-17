@@ -32,19 +32,11 @@ class Result(models.Model):
         ('V', 'Visitor'),
         ('T', 'Tie'),
     )
+    home = models.ForeignKey(Team, null=True, related_name='home_match')
+    visitor = models.ForeignKey(Team, null=True, related_name='visitor_match')
     home_goals = models.IntegerField(null=True, blank=True)
     visitor_goals = models.IntegerField(null=True, blank=True)
     winner = models.CharField(max_length=1, null=True, blank=True, choices=RESULT_CHOICES)
-
-    class Meta:
-        abstract = True
-
-
-class Match(Result):
-    date = models.DateTimeField(null=True, blank=True)
-    location = models.CharField(max_length=50, null=True, blank=True)
-    home = models.ForeignKey(Team, null=True, related_name='home_match')
-    visitor = models.ForeignKey(Team, null=True, related_name='visitor_match')
 
     def winner_team(self):
         if self.winner == 'H':
@@ -62,15 +54,23 @@ class Match(Result):
         else:
             return None
 
+
+class Match(Result):
+    date = models.DateTimeField(null=True, blank=True)
+    location = models.CharField(max_length=50, null=True, blank=True)
+
     def __unicode__(self):
-        return str(self.id)
+        if self.home != None and self.visitor != None:
+            return u'%s - %s' % (self.home.code, self.visitor.code)
+        else:
+            return str(self.id)
 
 
 class GroupMatch(Match):
     group = models.ForeignKey(Group)
 
     def __unicode__(self):
-        return "%s - %s" % (self.home, self.visitor)
+        return u'%s - %s' % (self.home.code, self.visitor.code)
     
     @staticmethod
     def before_save(sender, **kwargs):
@@ -96,11 +96,17 @@ class GroupMatch(Match):
         for q in Qualification.objects.filter(group=instance.group):
             round = q.qualify_for
             team = instance.group.get_position(q.position) 
-            if q.side == 'H':
-                round.home = team
-            else:
-                round.visitor = team
-            round.save()
+            if team:
+                print("%d-th %s qualifies for %s (%s)" % (
+                    q.position, q.group,
+                    q.qualify_for, q.side,
+                ))
+
+                if q.side == 'H':
+                    round.home = team
+                else:
+                    round.visitor = team
+                round.save()
 
 
 pre_save.connect(GroupMatch.before_save, sender=GroupMatch)
@@ -147,11 +153,16 @@ class Round(Match):
         for q in Qualification.objects.filter(round=instance):
             round = q.qualify_for
             team = instance.get_position(q.position) 
-            if q.side == 'H':
-                round.home = team
-            else:
-                round.visitor = team
-            round.save()
+            if team:
+                print("%d-th %s qualifies for %s (%s)" % (
+                    q.position, q.round,
+                    q.qualify_for, q.side,
+                ))
+                if q.side == 'H':
+                    round.home = team
+                else:
+                    round.visitor = team
+                round.save()
 
 pre_save.connect(Round.before_save, sender=Round)
 post_save.connect(Round.on_save, sender=Round)
@@ -162,7 +173,7 @@ class Bet(Result):
     match = models.ForeignKey(Match)
 
     def __unicode__(self):
-        return "%s (%s)" % (self.match, self.owner)
+        return "%s on %s" % (self.owner, self.match)
 
 class Qualification(models.Model):
     # What qualifies 

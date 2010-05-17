@@ -46,6 +46,10 @@ class WorldCupRules:
             unranked_teams = criterion.firsts(unranked_teams, matches)
             if len(unranked_teams) == 1:
                 return unranked_teams[0]
+        
+        print("WARNING: criteria does not provide a deterministic ranking " + 
+              "(conflicting: %s)" % unranked_teams)
+        return unranked_teams[0]
 
 
     def rank_group(self, teams, matches):
