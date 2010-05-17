@@ -10,7 +10,7 @@ class GroupMatchesInline(admin.TabularInline):
             'fields': ('date', 'location'),
         }),
         ('Results', {
-            'fields': ('home_goals', 'visitor_goals', 'winner'),
+            'fields': ('home_goals', 'visitor_goals'),
         }),
     )
     ordering = ('date', 'id')

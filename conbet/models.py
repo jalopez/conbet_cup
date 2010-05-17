@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import pre_save, post_save
 from django.contrib.auth.models import User
 from django.conf import settings
 
@@ -65,6 +65,17 @@ class GroupMatch(Match):
         return "%s - %s" % (self.home, self.visitor)
     
     @staticmethod
+    def before_save(sender, **kwargs):
+        instance = kwargs['instance']
+        if instance.home_goals != None and instance.visitor_goals != None:
+            if instance.home_goals > instance.visitor_goals:
+                instance.winner = 'H'
+            elif instance.visitor_goals > instance.home_goals:
+                instance.winner = 'V'
+            else:
+                instance.winner = 'T'
+
+    @staticmethod
     def on_save(sender, **kwargs):
         instance = kwargs['instance']
         ranking = settings.RULES.rank_group(
@@ -84,6 +95,7 @@ class GroupMatch(Match):
             round.save()
 
 
+pre_save.connect(GroupMatch.before_save, sender=GroupMatch)
 post_save.connect(GroupMatch.on_save, sender=GroupMatch)
 
 class Round(Match):
