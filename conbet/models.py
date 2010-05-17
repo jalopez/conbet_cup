@@ -1,12 +1,16 @@
 from django.db import models
+from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-
+from django.conf import settings
 
 class Group(models.Model):
     name = models.CharField(max_length=15, primary_key=True)
-
+    
     def __unicode__(self):
         return self.name
+
+    def get_position(self, position):
+        return self.team_set.get(group_order=position)
     
     def matches(self):
         return self.groupmatch_set.all().order_by('date', 'id')
@@ -42,14 +46,45 @@ class Match(Result):
     home = models.ForeignKey(Team, null=True, related_name='home_match')
     visitor = models.ForeignKey(Team, null=True, related_name='visitor_match')
 
+    def winner_team(self):
+        if self.winner == 'H':
+            return self.home
+        elif self.winner == 'V':
+            return self.visitor
+        else:
+            return None
+
     def __unicode__(self):
         return str(self.id)
+
 
 class GroupMatch(Match):
     group = models.ForeignKey(Group)
 
     def __unicode__(self):
         return "%s - %s" % (self.home, self.visitor)
+    
+    @staticmethod
+    def on_save(sender, **kwargs):
+        instance = kwargs['instance']
+        ranking = settings.RULES.rank_group(
+            instance.group.team_set.all(),
+            instance.group.groupmatch_set.all())
+        for i, team in enumerate(ranking):
+            team.group_order = i + 1
+            team.save()
+
+        for q in Qualification.objects.filter(group=instance.group):
+            round = q.qualify_for
+            team = instance.group.get_position(q.position) 
+            if q.side == 'H':
+                round.home = team
+            else:
+                round.visitor = team
+            round.save()
+
+
+post_save.connect(GroupMatch.on_save, sender=GroupMatch)
 
 class Round(Match):
     # 1 for the final, 2 for semi-final, 3 for quarter-finals...
@@ -75,9 +110,12 @@ class Bet(Result):
         return "%s (%s)" % (self.match, self.owner)
 
 class Qualification(models.Model):
+    # What qualifies 
     group = models.ForeignKey(Group, null=True)
     round = models.ForeignKey(Round, null=True, related_name='round')
     position = models.IntegerField()
+
+    # Qualifies for...
     qualify_for = models.ForeignKey(Round, related_name='qualify_for')
     SIDE_CHOICES = (
         ('H', 'Home team'),

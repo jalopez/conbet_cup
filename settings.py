@@ -2,6 +2,8 @@
 
 BETTING = True
 MAX_GOALS = 10
+from conbet.rules import WorldCupRules
+RULES = WorldCupRules()
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
