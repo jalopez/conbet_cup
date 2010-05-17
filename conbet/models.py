@@ -113,6 +113,19 @@ class Round(Match):
     def __unicode__(self):
         return "%s %d" % (self.STAGE_NAMES[self.stage], self.order)
 
+    @staticmethod
+    def before_save(sender, **kwargs):
+        instance = kwargs['instance']
+        if instance.home_goals != None and instance.visitor_goals != None:
+            if instance.home_goals > instance.visitor_goals:
+                instance.winner = 'H'
+            elif instance.visitor_goals > instance.home_goals:
+                instance.winner = 'V'
+            else:
+                pass # Don't force a winner 
+
+pre_save.connect(Round.before_save, sender=Round)
+
 
 class Bet(Result):
     owner = models.ForeignKey(User)
