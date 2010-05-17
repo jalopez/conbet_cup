@@ -96,11 +96,17 @@ class GroupMatch(Match):
         for q in Qualification.objects.filter(group=instance.group):
             round = q.qualify_for
             team = instance.group.get_position(q.position) 
-            if q.side == 'H':
-                round.home = team
-            else:
-                round.visitor = team
-            round.save()
+            if team:
+                print("%d-th %s qualifies for %s (%s)" % (
+                    q.position, q.group,
+                    q.qualify_for, q.side,
+                ))
+
+                if q.side == 'H':
+                    round.home = team
+                else:
+                    round.visitor = team
+                round.save()
 
 
 pre_save.connect(GroupMatch.before_save, sender=GroupMatch)
@@ -147,11 +153,16 @@ class Round(Match):
         for q in Qualification.objects.filter(round=instance):
             round = q.qualify_for
             team = instance.get_position(q.position) 
-            if q.side == 'H':
-                round.home = team
-            else:
-                round.visitor = team
-            round.save()
+            if team:
+                print("%d-th %s qualifies for %s (%s)" % (
+                    q.position, q.round,
+                    q.qualify_for, q.side,
+                ))
+                if q.side == 'H':
+                    round.home = team
+                else:
+                    round.visitor = team
+                round.save()
 
 pre_save.connect(Round.before_save, sender=Round)
 post_save.connect(Round.on_save, sender=Round)
