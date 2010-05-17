@@ -8,13 +8,13 @@
             {{ match.visitor|default:"--" }} </div>
         <div class="results">
                 <input type="radio" id="{{ match.id }}_h_win" name="{{ match.id }}_radio" {% if not editable %} disabled=true {% endif %}/>
-                <select id="{{ match.id }}_h">
+                <select id="{{ match.id }}_h" {% if not editable %} disabled=true {% endif %}>
                 {% for value in valid_goals %}
-                        <option value="{{ value }}" {% if not editable %} disabled=true {% endif %}>{{ value }}</option>
+                        <option value="{{ value }}">{{ value }}</option>
                 {% endfor %}
                 </select>
                 -
-                <select id="{{ match.id }}_v">
+                <select id="{{ match.id }}_v" {% if not editable %} disabled=true {% endif %}>
                 {% for value in valid_goals %}
                         <option value="{{ value }}">{{ value }}</option>
                 {% endfor %}
