@@ -50,6 +50,40 @@ class WorldCupRules:
                     goals[match.visitor] += match.visitor_goals
             return goals
 
+
+    class TiedPointsCriterion(Criterion):
+        def rank(self, teams, matches):
+            points = dict(zip(teams, [0,0,0,0]))
+            for match in matches:
+                if match.winner != None:
+                    if match.home in points and match.visitor in points: 
+                        if match.winner == 'T':
+                            points[match.home] += 1
+                            points[match.visitor] += 1
+                        else:
+                            points[match.winner_team()] += 3
+            return points
+    
+
+    class TiedGoalDifferenceCriterion(Criterion):
+        def rank(self, teams, matches):
+            goal_diff = dict(zip(teams, [0,0,0,0]))
+            for match in matches:
+                if match.home in goal_diff and match.visitor in goal_diff:
+                    goal_diff[match.home] += match.home_goals - match.visitor_goals
+                    goal_diff[match.visitor] += match.visitor_goals - match.home_goals
+            return goal_diff
+
+
+    class TiedScoredGoalsCriterion(Criterion):
+        def rank(self, teams, matches):
+            goals = dict(zip(teams, [0,0,0,0]))
+            for match in matches:
+                if match.home in goals and match.visitor in goals:
+                    goals[match.home] += match.home_goals
+                    goals[match.visitor] += match.visitor_goals
+            return goals
+
     class FIFACoefCriterion(Criterion):
         def rank(self, teams, matches):
             coefficients = {}
@@ -62,6 +96,9 @@ class WorldCupRules:
         PointsCriterion(), 
         GoalDifferenceCriterion(),
         ScoredGoalsCriterion(),
+        TiedPointsCriterion(), 
+        TiedGoalDifferenceCriterion(),
+        TiedScoredGoalsCriterion(),
         FIFACoefCriterion(),
     )
 
