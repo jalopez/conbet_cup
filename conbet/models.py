@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.signals import pre_save, post_save
 from django.contrib.auth.models import User
 from django.conf import settings
 
@@ -71,46 +70,7 @@ class GroupMatch(Match):
 
     def __unicode__(self):
         return u'%s - %s' % (self.home.code, self.visitor.code)
-    
-    @staticmethod
-    def before_save(sender, **kwargs):
-        instance = kwargs['instance']
-        if instance.home_goals != None and instance.visitor_goals != None:
-            if instance.home_goals > instance.visitor_goals:
-                instance.winner = 'H'
-            elif instance.visitor_goals > instance.home_goals:
-                instance.winner = 'V'
-            else:
-                instance.winner = 'T'
 
-    @staticmethod
-    def on_save(sender, **kwargs):
-        instance = kwargs['instance']
-        ranking = settings.RULES.rank_group(
-            instance.group.team_set.all(),
-            instance.group.groupmatch_set.all())
-        for i, team in enumerate(ranking):
-            team.group_order = i + 1
-            team.save()
-
-        for q in Qualification.objects.filter(group=instance.group):
-            round = q.qualify_for
-            team = instance.group.get_position(q.position) 
-            if team:
-                print("%d-th %s qualifies for %s (%s)" % (
-                    q.position, q.group,
-                    q.qualify_for, q.side,
-                ))
-
-                if q.side == 'H':
-                    round.home = team
-                else:
-                    round.visitor = team
-                round.save()
-
-
-pre_save.connect(GroupMatch.before_save, sender=GroupMatch)
-post_save.connect(GroupMatch.on_save, sender=GroupMatch)
 
 class Round(Match):
     # 1 for the final, 2 for semi-final, 3 for quarter-finals...
@@ -135,38 +95,6 @@ class Round(Match):
     def __unicode__(self):
         return "%s %d" % (self.STAGE_NAMES[self.stage], self.order)
 
-    @staticmethod
-    def before_save(sender, **kwargs):
-        instance = kwargs['instance']
-        if instance.home_goals != None and instance.visitor_goals != None:
-            if instance.home_goals > instance.visitor_goals:
-                instance.winner = 'H'
-            elif instance.visitor_goals > instance.home_goals:
-                instance.winner = 'V'
-            else:
-                pass # Don't force a winner 
-
-    @staticmethod
-    def on_save(sender, **kwargs):
-        instance = kwargs['instance']
-
-        for q in Qualification.objects.filter(round=instance):
-            round = q.qualify_for
-            team = instance.get_position(q.position) 
-            if team:
-                print("%d-th %s qualifies for %s (%s)" % (
-                    q.position, q.round,
-                    q.qualify_for, q.side,
-                ))
-                if q.side == 'H':
-                    round.home = team
-                else:
-                    round.visitor = team
-                round.save()
-
-pre_save.connect(Round.before_save, sender=Round)
-post_save.connect(Round.on_save, sender=Round)
-
 
 class Bet(Result):
     owner = models.ForeignKey(User)
@@ -174,6 +102,7 @@ class Bet(Result):
 
     def __unicode__(self):
         return "%s on %s" % (self.owner, self.match)
+
 
 class Qualification(models.Model):
     # What qualifies 
