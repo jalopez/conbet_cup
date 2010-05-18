@@ -6,7 +6,7 @@ from django.http import Http404, HttpResponse, HttpResponseServerError
 from django.shortcuts import get_list_or_404, get_object_or_404, render_to_response
 from django.contrib.auth.models import User
 
-from conbet.models import Match, Bet, GroupMatch, Round, Group
+from conbet.models import Match, Bet, GroupMatch, Round, Group, Qualification
 
 @login_required
 def index(request):
@@ -82,3 +82,43 @@ def update_bet(request):
             except GroupMatch.DoesNotExist: 
                 bet.winner = match_info['winner']
         bet.save()
+
+    cache_bet_teams(request.user)
+
+def cache_bet_teams(user):
+    # group classification
+    for group in Group.objects.all():
+        ranking = settings.RULES.rank_group(
+            group.team_set.all(),
+            GroupMatch.objects.filter(group=group, bet__owner=user),
+        )
+
+        for q in Qualification.objects.filter(group=group):
+            bet = user.bet_set.get(match=q.qualify_for)
+            team = ranking[q.position]
+            if team:
+                print("%d-th %s qualifies for %s (%s)" % (
+                    q.position, q.group, q.qualify_for, q.side,
+                ))
+
+                if q.side == 'H':
+                    bet.home = team
+                else:
+                    bet.visitor = team
+                bet.save()
+
+    # round classification
+    for q in Qualification.objects.filter(group=None).order_by('id'):
+        team = Bet.objects.get(owner=user, 
+                               match=q.round).get_position(q.position)
+        bet = Bet.objects.get(owner=user, match=q.qualify_for)
+        if team:
+            print("%d-th %s qualifies for %s (%s)" % (
+                q.position, q.round, q.qualify_for, q.side,
+            ))
+            if q.side == 'H':
+                bet.home = team
+            else:
+                bet.visitor = team
+            bet.save()
+

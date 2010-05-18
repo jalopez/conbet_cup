@@ -1,5 +1,7 @@
-from models import Team, Group, GroupMatch, Round, Qualification, Bet
 from django.contrib import admin
+
+from models import Team, Group, GroupMatch, Round, Qualification, Bet
+from conbet import signals
 
 
 class GroupMatchesInline(admin.TabularInline):
@@ -45,3 +47,4 @@ class TeamAdmin(admin.ModelAdmin):
 admin.site.register(Team, TeamAdmin)
 admin.site.register(Qualification)
 admin.site.register(Bet)
+signals.connect()
