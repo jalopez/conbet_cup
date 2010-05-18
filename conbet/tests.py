@@ -9,21 +9,6 @@ from conbet.rules import WorldCupRules
 from conbet.models import Team, GroupMatch
 from django.test import TestCase
 
-#class SimpleTest(TestCase):
-#    def test_basic_addition(self):
-#        """
-#        Tests that 1 + 1 always equals 2.
-#        """
-#        self.failUnlessEqual(1 + 1, 2)
-#
-#__test__ = {"doctest": """
-#Another way to test that 1 + 1 is equal to 2.
-#
-#>>> 1 + 1 == 2
-#True
-#"""}
-
-
 class WorldCupRulesTest(TestCase):
     def test_rank_by_points(self):
         """Usual case: the points speak by themselves"""
@@ -63,3 +48,33 @@ class WorldCupRulesTest(TestCase):
         self.assertEquals(rank, [teams[1], teams[3], teams[0], teams[2]])
 
     
+    def test_rank_by_goals(self):
+        """Total goals and goal difference"""
+        teams = (
+            Team(code='es', name='es'), # 3  2 T: 2
+            Team(code='en', name='en'), # 3  2 T: 5
+            Team(code='pt', name='pt'), # 1  -4
+            Team(code='fi', name='fi'), # 1  0
+        )
+        matches = (
+            # es 2 - en 0
+            GroupMatch(
+                home=teams[0], home_goals=2,
+                visitor=teams[1], visitor_goals=0,
+                winner='H'),
+
+            # pt 0 - fi 0
+            GroupMatch(
+                home=teams[2], home_goals=0,
+                visitor=teams[3], visitor_goals=0,
+                winner='T'),
+
+            # en 5 - pt 1
+            GroupMatch(
+                home=teams[1], home_goals=5,
+                visitor=teams[2], visitor_goals=1,
+                winner='H'),
+        )
+        instance = WorldCupRules()
+        rank = instance.rank_group(teams, matches)
+        self.assertEquals(rank, [teams[1], teams[0], teams[3], teams[2]])

@@ -28,7 +28,27 @@ class WorldCupRules:
                             points[match.winner_team()] += 3
 
             return points
-            
+    
+    class GoalDifferenceCriterion(Criterion):
+        def rank(self, teams, matches):
+            goal_diff = dict(zip(teams, [0,0,0,0]))
+            for match in matches:
+                if match.home in goal_diff:
+                    goal_diff[match.home] += match.home_goals - match.visitor_goals
+                if match.visitor in goal_diff:
+                    goal_diff[match.visitor] += match.visitor_goals - match.home_goals
+            return goal_diff
+
+
+    class ScoredGoalsCriterion(Criterion):
+        def rank(self, teams, matches):
+            goals = dict(zip(teams, [0,0,0,0]))
+            for match in matches:
+                if match.home in goals:
+                    goals[match.home] += match.home_goals
+                if match.visitor in goals:
+                    goals[match.visitor] += match.visitor_goals
+            return goals
 
     class FIFACoefCriterion(Criterion):
         def rank(self, teams, matches):
@@ -38,7 +58,12 @@ class WorldCupRules:
             return coefficients
 
 
-    group_criteria = (PointsCriterion(), FIFACoefCriterion(),)
+    group_criteria = (
+        PointsCriterion(), 
+        GoalDifferenceCriterion(),
+        ScoredGoalsCriterion(),
+        FIFACoefCriterion(),
+    )
 
     def first(self, criteria, teams, matches):
         unranked_teams = teams
