@@ -52,6 +52,7 @@ def bet(request, username, editable=False):
         'rounds': rounds,
         'valid_goals': range(settings.MAX_GOALS+1),
         'editable': editable,
+        'points': score_bet(user),
     })
 
 @login_required
@@ -122,3 +123,48 @@ def cache_bet_teams(user):
                 bet.visitor = team
             bet.save()
 
+def group_list(list):
+    """Group a tuple list by the first element into a dict."""
+    result = {}
+    for element in list:
+        key = element[0]
+        if key in result:
+            result[key].append(element[1:])
+        else:
+            result[key] = [element[1:]]
+    return result
+
+def score_bet(user):
+    sr = settings.SCORE_RULES
+    match_points = []
+    group_points = []
+    for group in Group.objects.all():
+        for groupmatch in group.groupmatch_set.all():
+            try:
+                bet = Bet.objects.get(owner=user, match=groupmatch)
+                match_points += map(lambda x: (groupmatch.id, x[0], x[1]),
+                    sr.score_group_match(bet, groupmatch))
+            except Bet.DoesNotExist:
+                pass # partial bet
+
+        guessed_ranking = settings.RULES.rank_group(
+            group.team_set.all(),
+            GroupMatch.objects.filter(group=group, bet__owner=user),
+        )
+        ranking = settings.RULES.rank_group(
+            group.team_set.all(),
+            group.groupmatch_set.all(),
+        )
+        group_points += map(lambda x: (group.name, x[0], x[1]),
+            sr.score_group_classification(guessed_ranking, ranking))
+
+    for round in Round.objects.all():
+        try:
+            bet = Bet.objects.get(owner=user, match=round)
+            match_points += map(lambda x: (round.id, x[0], x[1]),
+                                sr.score_round(bet, round))
+        except Bet.DoesNotExist:
+            pass # partial bet
+        
+    return { 'match_points': group_list(match_points),
+             'group_points': group_list(group_points), }

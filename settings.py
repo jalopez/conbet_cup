@@ -1,12 +1,16 @@
 # Django settings for conbet_cup project.
 
+from conbet.rules  import WorldCupRules as Rules
+from conbet.points import WorldCupScoreRules as ScoreRules
 BETTING = True
 MAX_GOALS = 10
-from conbet.rules import WorldCupRules
-RULES = WorldCupRules()
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+RULES       = Rules()
+SCORE_RULES = ScoreRules()
+
+#####################################
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),

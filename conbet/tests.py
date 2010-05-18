@@ -1,10 +1,3 @@
-"""
-This file demonstrates two different styles of tests (one doctest and one
-unittest). These will both pass when you run "manage.py test".
-
-Replace these with more appropriate tests for your application.
-"""
-
 from conbet.rules import WorldCupRules
 from conbet.models import Team, GroupMatch
 from django.test import TestCase
@@ -78,3 +71,5 @@ class WorldCupRulesTest(TestCase):
         instance = WorldCupRules()
         rank = instance.rank_group(teams, matches)
         self.assertEquals(rank, [teams[1], teams[0], teams[3], teams[2]])
+
+

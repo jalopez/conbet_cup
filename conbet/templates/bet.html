@@ -14,6 +14,32 @@ var bets = {
 {% endfor %}
 };
 
+var points = { 
+    'group_points': {
+{% for group in points.group_points.items %}
+    '{{ group.0 }}': [
+    {% for points in group.1 %}
+        { 'points': {{ points.0 }}, 
+          'reason': "{{ points.1 }}" 
+        }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+    ]{% if not forloop.last %},{% endif %}
+{% endfor %}
+    },
+
+    'match_points': {
+{% for match in points.match_points.items %}
+    {{ match.0 }}: [
+    {% for points in match.1 %}
+        { 'points': {{ points.0 }},
+          'reason': "{{ points.1 }}"
+        }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+    ]{% if not forloop.last %},{% endif %}
+{% endfor %}
+    }
+};
+
 function send() {
 	$H(bets).each(function(pair){
 	     match = pair.key;
