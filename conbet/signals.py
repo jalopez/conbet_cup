@@ -67,6 +67,7 @@ def post_save_round(sender, **kwargs):
                 round.visitor = team
             round.save()
 
+
 def connect():
     pre_save.connect(pre_save_groupmatch, sender=GroupMatch)
     post_save.connect(post_save_groupmatch, sender=GroupMatch)

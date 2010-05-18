@@ -53,6 +53,14 @@ class Result(models.Model):
         else:
             return None
 
+    def get_position(self, position):
+        if position == 1:
+            return self.winner_team()
+        elif position == 2:
+            return self.loser_team()
+        else:
+            raise Exception("Out of range")
+
 
 class Match(Result):
     date = models.DateTimeField(null=True, blank=True)
@@ -83,14 +91,6 @@ class Round(Match):
         3: 'Quarter-final',
         4: 'Round-of-16',
     }
-
-    def get_position(self, position):
-        if position == 1:
-            return self.winner_team()
-        elif position == 2:
-            return self.loser_team()
-        else:
-            raise Exception("Out of range")
 
     def __unicode__(self):
         return "%s %d" % (self.STAGE_NAMES[self.stage], self.order)
