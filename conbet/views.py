@@ -15,9 +15,29 @@ def index(request):
     else:
         return ranking(request)
 
+
 @login_required
 def ranking(request):
-    raise Http404
+    users = []
+    position = 0
+    last_points = None
+    for user in User.objects.all():
+        points = total_score(user)
+        if points != last_points:
+            last_points = points
+            position += 1
+
+        users.append({
+            'position': position,
+            'points': points,
+            'name': user.username,
+        })
+    users = sorted(users, key=lambda x: -x['points'])
+
+    return render_to_response('ranking.html', {
+        'users': users
+    })
+
 
 @login_required
 def edit_bet(request):
@@ -123,6 +143,7 @@ def cache_bet_teams(user):
                 bet.visitor = team
             bet.save()
 
+
 def group_list(list):
     """Group a tuple list by the first element into a dict."""
     result = {}
@@ -133,6 +154,7 @@ def group_list(list):
         else:
             result[key] = [element[1:]]
     return result
+
 
 def score_bet(user):
     sr = settings.SCORE_RULES
@@ -168,3 +190,12 @@ def score_bet(user):
         
     return { 'match_points': group_list(match_points),
              'group_points': group_list(group_points), }
+
+
+def total_score(user):
+    bet = score_bet(user)
+    total_score = 0
+    for scores in bet['match_points'].values() + bet['group_points'].values():
+        for score in scores:
+            total_score += score[0]
+    return total_score

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load filters %}
+
+{% block script %}
+{% endblock %}
+
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <th>Position</th>
+            <th>Username</th>
+            <th>Points</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+        <tr>
+            <td>{{ user.position }}</td>
+            {% url conbet.views.bet user.name as bet_url %}
+            <td><a href="{{ bet_url }}">{{ user.name }}</a></td>
+            <td>{{ user.points }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
