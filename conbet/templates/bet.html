@@ -6,7 +6,11 @@
 
 var bets = {
 {% for bet in bets %}
-{{ bet.match_id }}: { 
+{% if bet.match_id %}
+    {{ bet.match_id }}
+{% else %}
+    {{ bet.id }}
+{% endif %}: { 
 	'home_goals': {{ bet.home_goals|default:"0" }}, 
 	'visitor_goals': {{ bet.visitor_goals|default:"0" }},
 	'winner': '{{ bet.winner|default:"H" }}'
@@ -14,6 +18,7 @@ var bets = {
 {% endfor %}
 };
 
+{% if points %}
 var points = { 
     'group_points': {
 {% for group in points.group_points.items %}
@@ -39,7 +44,9 @@ var points = {
 {% endfor %}
     }
 };
+{% endif %} 
 
+{% if editable %}
 function send() {
 	$H(bets).each(function(pair){
 	     match = pair.key;
@@ -71,6 +78,7 @@ function send() {
 	hidden.value = Object.toJSON(bets);
 	return true;
 }
+{% endif %}
 
 function init() {
 	$H(bets).each(function(pair){
@@ -82,8 +90,13 @@ function init() {
              radio_h_id = home_goals_id + "_win";
 	     radio_v_id = visitor_goals_id + "_win";
              
+             {% if editable %}
 	     $(home_goals_id).value = data.home_goals;
 	     $(visitor_goals_id).value = data.visitor_goals;
+             {% else %}
+	     $(home_goals_id).update(data.home_goals);
+	     $(visitor_goals_id).update(data.visitor_goals);
+             {% endif %}
 	     
 	     // FIXME: think in a better way of checking if the bet is for the
 	     // first round or not

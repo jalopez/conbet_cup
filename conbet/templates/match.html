@@ -7,18 +7,30 @@
         <div class="teams"> {{ match.home|default:"--" }} - 
             {{ match.visitor|default:"--" }} </div>
         <div class="results">
-                <input type="radio" id="{{ match.id }}_h_win" name="{{ match.id }}_radio" {% if not editable %} disabled=true {% endif %}/>
-                <select id="{{ match.id }}_h" {% if not editable %} disabled=true {% endif %}>
+            {% if editable %}
+                <input type="radio" id="{{ match.id }}_h_win" 
+                       name="{{ match.id }}_radio" />
+                <select id="{{ match.id }}_h">
                 {% for value in valid_goals %}
                         <option value="{{ value }}">{{ value }}</option>
                 {% endfor %}
                 </select>
                 -
-                <select id="{{ match.id }}_v" {% if not editable %} disabled=true {% endif %}>
+                <select id="{{ match.id }}_v">
                 {% for value in valid_goals %}
                         <option value="{{ value }}">{{ value }}</option>
                 {% endfor %}
                 </select>
-                <input type="radio" id="{{ match.id }}_v_win" name="{{ match.id }}_radio" {% if not editable %} disabled=true {% endif %}/>
+                <input type="radio" id="{{ match.id }}_v_win" 
+                       name="{{ match.id }}_radio"/>
+            {% else %}
+                <input type="radio" id="{{ match.id }}_h_win" 
+                       name="{{ match.id }}_radio" disabled="true"/>
+                <span id="{{ match.id }}_h"></span>
+                -
+                <span id="{{ match.id }}_v"></span>
+                <input type="radio" id="{{ match.id }}_v_win" 
+                       name="{{ match.id }}_radio" disabled="true"/>
+            {% endif %}
         </div>
 </div>

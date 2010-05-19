@@ -45,6 +45,7 @@ def edit_bet(request):
         update_bet(request)
     return bet(request, request.user.username, editable=True) 
 
+
 @login_required
 def bet(request, username, editable=False):
     user = get_object_or_404(User, username=username)
@@ -75,9 +76,26 @@ def bet(request, username, editable=False):
         'points': score_bet(user),
     })
 
+
 @login_required
 def results(request):
-    raise Http404
+    stages = Round.objects.values('stage').distinct().order_by('-stage')
+    rounds = []
+    for s in stages:
+        stage = s['stage']
+        rounds.append([
+            Round.STAGE_NAMES[stage],
+            Round.objects.filter(stage=stage).order_by('order'),
+            ])
+
+    return render_to_response('bet.html', {
+        'groups': Group.objects.all().order_by('name'),
+        'bets': Match.objects.all(),
+        'rounds': rounds,
+        'valid_goals': range(settings.MAX_GOALS+1),
+        'editable': False,
+    })
+
 
 ### Aux functions
 
