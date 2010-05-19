@@ -2,7 +2,7 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from django.http import Http404, HttpResponse, HttpResponseServerError
+from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseServerError
 from django.shortcuts import get_list_or_404, get_object_or_404, render_to_response
 from django.contrib.auth.models import User
 
@@ -49,6 +49,9 @@ def edit_bet(request):
 @login_required
 def bet(request, username, editable=False):
     user = get_object_or_404(User, username=username)
+    if user != request.user and settings.BETTING:
+        return HttpResponseForbidden()
+
 
     stages = Round.objects.values('stage').distinct().order_by('-stage')
     rounds = []
@@ -179,7 +182,8 @@ def score_bet(user):
     match_points = []
     group_points = []
     for group in Group.objects.all():
-        for groupmatch in group.groupmatch_set.all():
+        played_matches = group.groupmatch_set.filter(winner__isnull=False)
+        for groupmatch in played_matches:
             try:
                 bet = Bet.objects.get(owner=user, match=groupmatch)
                 match_points += map(lambda x: (groupmatch.id, x[0], x[1]),
@@ -187,18 +191,19 @@ def score_bet(user):
             except Bet.DoesNotExist:
                 pass # partial bet
 
-        guessed_ranking = settings.RULES.rank_group(
-            group.team_set.all(),
-            GroupMatch.objects.filter(group=group, bet__owner=user),
-        )
-        ranking = settings.RULES.rank_group(
-            group.team_set.all(),
-            group.groupmatch_set.all(),
-        )
-        group_points += map(lambda x: (group.name, x[0], x[1]),
-            sr.score_group_classification(guessed_ranking, ranking))
+        if len(group.groupmatch_set.filter(winner__isnull=True)) == 0:
+            guessed_ranking = settings.RULES.rank_group(
+                group.team_set.all(),
+                GroupMatch.objects.filter(group=group, bet__owner=user),
+            )
+            ranking = settings.RULES.rank_group(
+                group.team_set.all(),
+                group.groupmatch_set.all(),
+            )
+            group_points += map(lambda x: (group.name, x[0], x[1]),
+                sr.score_group_classification(guessed_ranking, ranking))
 
-    for round in Round.objects.all():
+    for round in Round.objects.filter(winner__isnull=False):
         try:
             bet = Bet.objects.get(owner=user, match=round)
             match_points += map(lambda x: (round.id, x[0], x[1]),
