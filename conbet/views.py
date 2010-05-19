@@ -52,7 +52,6 @@ def bet(request, username, editable=False):
     if user != request.user and settings.BETTING:
         return HttpResponseForbidden()
 
-
     stages = Round.objects.values('stage').distinct().order_by('-stage')
     rounds = []
     for s in stages:
@@ -100,6 +99,10 @@ def results(request):
         'editable': False,
     })
 
+
+@login_required
+def rank_group(request):
+    pass
 
 ### Aux functions
 

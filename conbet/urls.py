@@ -7,4 +7,5 @@ urlpatterns = patterns('conbet',
     (r'^users/$', 'views.ranking'),
     (r'^users/(?P<username>\w+)/$', 'views.bet'),
     (r'^results/$', 'views.results'),
+    (r'^rank_group/$', 'views.rank_group'),
 )
