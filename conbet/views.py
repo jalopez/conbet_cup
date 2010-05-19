@@ -72,6 +72,7 @@ def bet(request, username, editable=False):
 
     return render_to_response('bet.html', {
         'groups': Group.objects.all().order_by('name'),
+        'qualifications': Qualification.objects.all(),
         'bets': bets,
         'rounds': rounds,
         'valid_goals': range(settings.MAX_GOALS+1),

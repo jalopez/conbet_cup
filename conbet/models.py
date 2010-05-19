@@ -14,6 +14,7 @@ class Group(models.Model):
     def matches(self):
         return self.groupmatch_set.all().order_by('date', 'id')
 
+
 class Team(models.Model):
     code = models.CharField(max_length=2, primary_key=True)
     name = models.CharField(max_length=40, blank=False)

@@ -4,6 +4,18 @@
 
 {% block script %}
 
+var qualifications = [
+{% for q in qualifications %}
+    {
+        'group': {{ q.group|default:"null" }},
+        'round': {{ q.round|default:"null" }},
+        'position': {{ q.position }},
+        'qualify_for': {{ q.qualify_for.id }},
+        'side': '{{ q.side }}'
+    }{% if not forloop.last %},{% endif %}
+{% endfor %}
+];
+
 var bets = {
 {% for bet in bets %}
 {% if bet.match_id %}
