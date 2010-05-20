@@ -5,6 +5,7 @@ from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseServerError
 from django.shortcuts import get_list_or_404, get_object_or_404, render_to_response
 from django.contrib.auth.models import User
+from django.template import RequestContext
 
 from conbet.models import Match, Bet, GroupMatch, Round, Group, Qualification, Result
 
@@ -34,9 +35,8 @@ def ranking(request):
         })
     users = sorted(users, key=lambda x: -x['points'])
 
-    return render_to_response('ranking.html', {
-        'users': users
-    })
+    return render_to_response('ranking.html', { 'users': users },
+        context_instance=RequestContext(request))
 
 
 @login_required
@@ -77,7 +77,7 @@ def bet(request, username, editable=False):
         'valid_goals': range(settings.MAX_GOALS+1),
         'editable': editable,
         'points': score_bet(user),
-    })
+    }, context_instance=RequestContext(request))
 
 
 @login_required
@@ -97,7 +97,7 @@ def results(request):
         'rounds': rounds,
         'valid_goals': range(settings.MAX_GOALS+1),
         'editable': False,
-    })
+    }, context_instance=RequestContext(request))
 
 
 @login_required

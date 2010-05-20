@@ -15,6 +15,7 @@ TEMPLATE_DIRS = (
     # '/path/to/conbet_cup/conbet/templates',
 )
 STATIC_CONTENT_DIR = '/path/to/conber_cup/static'
+STATIC_URL = '/static'
 #####################################
 
 ADMINS = (
@@ -69,6 +70,9 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',
     'django.template.loaders.app_directories.load_template_source',
 #     'django.template.loaders.eggs.load_template_source',
+)
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'conbet.context.static_url',
 )
 
 MIDDLEWARE_CLASSES = (

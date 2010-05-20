@@ -1,21 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-{% load i18n %}
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> 
 <head> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Conbet cup</title>
-<style type="text/css"> 
-
-#group_phase input {
-    visibility: hidden;
-}
-</style>
+	<link type="text/css" href="{{ STATIC_URL }}/css/style.css" rel="stylesheet" />
 <script type="text/javascript" 
     src="http://ajax.googleapis.com/ajax/libs/prototype/1.6.0.2/prototype.js"></script>
 
 <script type="text/javascript">
  {% block script %}
+	function init() {}
  {% endblock %}
 </script>
 </head> 
