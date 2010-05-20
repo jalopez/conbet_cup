@@ -63,10 +63,7 @@ def bet(request, username, editable=False):
 
     bets = []
     for match in Match.objects.all():
-        try:
-            bet = Bet.objects.get(owner=user, match=match)
-        except Bet.DoesNotExist:
-            bet = Bet(owner=user, match=match)
+        bet, created = Bet.objects.get_or_create(owner=user, match=match)
         bets.append(bet)
 
     return render_to_response('bet.html', {
@@ -125,10 +122,7 @@ def update_bet(request):
     bet_info = json.loads(request.POST.get('bets'))
     for (match_id, match_info) in bet_info.items():
         match = Match.objects.get(id=match_id)
-        try:
-            bet = Bet.objects.get(owner=request.user, match=match)
-        except Bet.DoesNotExist:
-            bet = Bet(owner=request.user, match=match)
+        bet,created = Bet.objects.get_or_create(owner=request.user, match=match)
         bet.home_goals = match_info['home_goals']
         bet.visitor_goals = match_info['visitor_goals']
         if bet.home_goals > bet.visitor_goals:
