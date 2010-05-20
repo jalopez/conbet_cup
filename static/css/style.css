@@ -1,3 +1,37 @@
 #group_phase input {
     visibility: hidden;
 }
+#group_phase {
+    overflow: auto;
+}
+.group {
+    float:left;
+    width: 25%;
+    min-height: 450px;
+}
+
+.team_table {
+    position: relative;
+    height: 90px;
+}
+
+.team {
+    position: absolute;
+    width: 100%;
+}
+.team div {
+    float: left;
+    width: 50%;
+}
+.team_1 {
+    top: 0px;
+}
+.team_2 {
+    top: 20px;
+}
+.team_3 {
+    top: 40px;
+}
+.team_4 {
+    top: 60px;
+}

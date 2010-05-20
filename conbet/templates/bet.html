@@ -139,6 +139,12 @@ function init() {
   <div class="group">
         <div class="title">{{ group.name }}</div>
   	<div class="team_table" id="table_{{ group.name }}">
+		{% for team in group.team_set.values %}
+		 <div class="team team_{{ forloop.counter }}" id="{{ team.code }}"> 
+		    <div> {{ team.name }}</div>
+		    <div class="points"> - </div>
+                 </div>
+		{% endfor %}
 	</div>
 	{% for match in group.matches %}
 	{% include "match.html" %}
