@@ -7,8 +7,8 @@
 var qualifications = [
 {% for q in qualifications %}
     {
-        'group': {{ q.group|default:"null" }},
-        'round': {{ q.round|default:"null" }},
+        {% if q.group %}'group': '{{ q.group.name }}',{% endif %}
+        {% if q.round %}'round': {{ q.round.id }},{% endif %}
         'position': {{ q.position }},
         'qualify_for': {{ q.qualify_for.id }},
         'side': '{{ q.side }}'
