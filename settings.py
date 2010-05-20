@@ -10,6 +10,11 @@ TEMPLATE_DEBUG = DEBUG
 RULES       = Rules()
 SCORE_RULES = ScoreRules()
 
+TEMPLATE_DIRS = (
+    # '/path/to/conbet_cup/templates',
+    # '/path/to/conbet_cup/conbet/templates',
+)
+STATIC_CONTENT_DIR = '/path/to/conber_cup/static'
 #####################################
 
 ADMINS = (
@@ -78,11 +83,6 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 APPEND_SLASH = False
 
-
-TEMPLATE_DIRS = (
-    # '/path/to/conbet_cup/templates',
-    # '/path/to/conbet_cup/conbet/templates',
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',

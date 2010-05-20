@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
+from django.conf import settings
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -8,3 +9,10 @@ urlpatterns = patterns('',
         'login.html'}),
     (r'^', include('conbet.urls')),
 )
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {
+            'document_root': settings.STATIC_CONTENT_DIR
+        }),
+    )
