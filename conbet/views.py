@@ -6,7 +6,7 @@ from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpRespon
 from django.shortcuts import get_list_or_404, get_object_or_404, render_to_response
 from django.contrib.auth.models import User
 
-from conbet.models import Match, Bet, GroupMatch, Round, Group, Qualification
+from conbet.models import Match, Bet, GroupMatch, Round, Group, Qualification, Result
 
 @login_required
 def index(request):
@@ -101,8 +101,22 @@ def results(request):
 
 
 @login_required
-def rank_group(request):
-    pass
+def rank_group(request, groupname):
+    group_matches = json.loads(request.POST.get('matches'))
+
+    group = get_object_or_404(Group, name=groupname)
+    teams = group.team_set.all()
+    results = []
+    for match_info in group_matches:
+        match = group.groupmatch_set.get(id=match_info["id"])
+        results.append(Result(home=match.home, visitor=match.visitor,
+            home_goals=match_info['home_goals'], 
+            visitor_goals=match_info['visitor_goals'],
+            winner=match_info['winner']))
+
+    ranking = settings.RULES.rank_group(teams, results)
+    return HttpResponse(json.dumps(map(lambda t: t.code, ranking)),
+        content_type="text/json")
 
 ### Aux functions
 

@@ -76,6 +76,8 @@ ROOT_URLCONF = 'conbet_cup.urls'
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
+APPEND_SLASH = False
+
 
 TEMPLATE_DIRS = (
     # '/path/to/conbet_cup/templates',
