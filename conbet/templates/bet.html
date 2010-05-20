@@ -16,6 +16,12 @@ var qualifications = [
 {% endfor %}
 ];
 
+var teams = {
+{% for team in teams %}
+	{{ team.code }}: "{{ team.name|sanitized|safe }}" {% if not forloop.last %},{% endif %}
+{% endfor %}
+};
+
 var bets = {
 {% for bet in bets %}
 {% if bet.match_id %}

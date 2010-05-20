@@ -7,7 +7,7 @@ from django.shortcuts import get_list_or_404, get_object_or_404, render_to_respo
 from django.contrib.auth.models import User
 from django.template import RequestContext
 
-from conbet.models import Match, Bet, GroupMatch, Round, Group, Qualification, Result
+from conbet.models import Match, Bet, GroupMatch, Round, Group, Qualification, Result, Team
 
 @login_required
 def index(request):
@@ -69,6 +69,7 @@ def bet(request, username, editable=False):
     return render_to_response('bet.html', {
         'groups': Group.objects.all().order_by('name'),
         'qualifications': Qualification.objects.all(),
+        'teams': Team.objects.all(),
         'bets': bets,
         'rounds': rounds,
         'valid_goals': range(settings.MAX_GOALS+1),
@@ -90,6 +91,7 @@ def results(request):
 
     return render_to_response('bet.html', {
         'groups': Group.objects.all().order_by('name'),
+        'teams': Team.objects.all(),
         'bets': Match.objects.all(),
         'rounds': rounds,
         'valid_goals': range(settings.MAX_GOALS+1),
