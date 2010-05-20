@@ -18,7 +18,7 @@ var qualifications = [
 
 var teams = {
 {% for team in teams %}
-	{{ team.code }}: "{{ team.name|sanitized|safe }}" {% if not forloop.last %},{% endif %}
+	{{ team.code }}: "{{ team.name|trim|safe }}" {% if not forloop.last %},{% endif %}
 {% endfor %}
 };
 

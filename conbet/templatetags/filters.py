@@ -13,6 +13,6 @@ def hash(h, key):
 
 @stringfilter
 @register.filter
-def sanitized(text):
-    regexp = re.compile(r'\s*$', re.UNICODE)
-    return re.sub(regexp, '', text)
+def trim(text):
+    regexp = re.compile(r'^\s*(?P<trimmed>.*?)\s*$', re.UNICODE)
+    return re.match(regexp, text).group('trimmed')
