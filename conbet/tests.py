@@ -71,5 +71,8 @@ class WorldCupRulesTest(TestCase):
         instance = WorldCupRules()
         rank = instance.rank_group(teams, matches)
         self.assertEquals(rank, [teams[1], teams[0], teams[3], teams[2]])
-
-
+# rank_group test (for teams.txt.example)
+#  Request: matches=[{"id":1, "home_goals":2, "visitor_goals": 0, "winner":"H"},
+#  {"id":2, "home_goals":0, "visitor_goals":0, "winner":"T"}, {"id":5,
+#  "home_goals":5, "visitor_goals":1, "winner":"H"}]
+#  Expected_result: ["mx", "za", "fr", "uy"]
