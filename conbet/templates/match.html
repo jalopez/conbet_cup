@@ -9,20 +9,20 @@
         <div class="results">
             {% if editable %}
                 <input type="radio" id="{{ match.id }}_h_win" 
-                       name="{{ match.id }}_radio" />
-                <select id="{{ match.id }}_h">
+                       name="{{ match.id }}_radio" onchange="changed(this)"/>
+                <select id="{{ match.id }}_h" onchange="changed(this)">
                 {% for value in valid_goals %}
-                        <option value="{{ value }}">{{ value }}</option>
+                        <option value="{{ value }}" >{{ value }}</option>
                 {% endfor %}
                 </select>
                 -
-                <select id="{{ match.id }}_v">
+                <select id="{{ match.id }}_v" onchange="changed(this)">
                 {% for value in valid_goals %}
                         <option value="{{ value }}">{{ value }}</option>
                 {% endfor %}
                 </select>
                 <input type="radio" id="{{ match.id }}_v_win" 
-                       name="{{ match.id }}_radio"/>
+                       name="{{ match.id }}_radio" onchange="changed(this)"/>
             {% else %}
                 <input type="radio" id="{{ match.id }}_h_win" 
                        name="{{ match.id }}_radio" disabled="true"/>

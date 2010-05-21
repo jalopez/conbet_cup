@@ -96,6 +96,38 @@ function send() {
 	hidden.value = Object.toJSON(bets);
 	return true;
 }
+
+function changed(element) {
+	var extract_id = new RegExp("\\d+");
+	var match_id = extract_id.exec(element.id)[0];
+	if (element.type == "radio") { // A radio button
+		if (bets[match_id]["home_goals"] == bets[match_id]["visitor_goals"]) {
+		if (new RegExp("h").test(element.id)) { // Home 
+	   		bets[match_id].winner = "H";
+		} else {
+			bets[match_id].winner = "V";
+		}
+	    }
+	} else {
+		if (new RegExp("h").test(element.id)) { // Home
+			bets[match_id].home_goals = element.value;
+		} else {
+			bets[match_id].visitor_goals = element.value;
+		}
+		if (bets[match_id].home_goals > bets[match_id].visitor_goals) {
+			bets[match_id].winner = "H";
+		} else if (bets[match_id].home_goals < bets[match_id].visitor_goals) {
+			bets[match_id].winner = "V";
+		}	
+	}
+	if (bets[match_id].group) {
+		// TODO
+		
+	} else {
+		update_rounds();
+	}
+	
+} 
 {% endif %}
 
 function init() {
