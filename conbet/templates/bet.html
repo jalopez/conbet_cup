@@ -134,6 +134,7 @@ function init() {
 
 
 {% block content %}
+<div id="wrapper">
 <div id="group_phase">
 {% for group in groups %}
   <div class="group">
@@ -141,7 +142,10 @@ function init() {
   	<div class="team_table" id="table_{{ group.name }}">
 		{% for team in group.team_set.values %}
 		 <div class="team team_{{ forloop.counter }}" id="{{ team.code }}"> 
-		    <div> {{ team.name }}</div>
+		    <div class="name">
+	                 <img src="{{ STATIC_URL }}/img/flags/{{ team.code }}.png" />
+			 {{ team.name }}
+		    </div>
 		    <div class="points"> - </div>
                  </div>
 		{% endfor %}
@@ -170,5 +174,7 @@ function init() {
 <input type="submit" value="Send" />
 </form>
 {% endif %}
+
+</div> <!-- wrapper -->
 
 {% endblock %}

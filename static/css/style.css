@@ -1,3 +1,17 @@
+html, body {
+	background-color: #486793;
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 11pt;
+}
+
+#wrapper {
+	min-width: 800px;
+	max-width: 1000px;
+	margin: 1em auto;
+	background-color: white;
+	padding: 1em 2em;
+}
+
 #group_phase input {
     visibility: hidden;
 }
@@ -9,29 +23,39 @@
     width: 25%;
     min-height: 450px;
 }
-
+.group .title {
+	margin: 0 auto 1ex;
+	font-size: 40px;
+	width: 40px;
+	text-align: center;
+}
 .team_table {
     position: relative;
-    height: 90px;
+    height: 100px;
 }
-
+.team {
+	height: 25px;
+	overflow: hidden;
+	border: 1px solid #A0B2BE;
+}
+.team .name {
+	float: left;
+	width: 80%;
+}
+.team .points {
+	float: right;
+	width: 20%;
+}
 .team {
     position: absolute;
     width: 100%;
 }
-.team div {
-    float: left;
-    width: 50%;
-}
-.team_1 {
-    top: 0px;
-}
-.team_2 {
-    top: 20px;
-}
-.team_3 {
-    top: 40px;
-}
-.team_4 {
-    top: 60px;
+.team_1 { top: 0px; }
+.team_2 { top: 25px; }
+.team_3 { top: 50px; }
+.team_4 { top: 75px; }
+.team img {
+	width: 20px;
+	vertical-align: middle;
+	margin: 0 3px 3px 0;
 }
