@@ -32,6 +32,8 @@ var bets = {
 	'home_goals': {{ bet.home_goals|default:"0" }}, 
 	'visitor_goals': {{ bet.visitor_goals|default:"0" }},
 	'winner': '{{ bet.winner|default:"H" }}'
+	{% if bet.match.groupname %}, 'group': '{{ bet.match.groupname }}' {% endif %}
+	
 }{% if not forloop.last %},{% endif %}
 {% endfor %}
 };
@@ -121,13 +123,26 @@ function changed(element) {
 		}	
 	}
 	if (bets[match_id].group) {
-		// TODO
+		group_matches = $H(bets).findAll(function(element){element.group==bets[match_id].group});
+		new Ajax.Request("rank_group/" + bets[match_id].group, {
+		     'method': 'post',
+		     'parameters': {
+			    'matches': Object.toJSON(group_matches)
+			},
+ 	             'onSuccess': group_updated
+		}); 
 		
 	} else {
 		update_rounds();
 	}
 	
 } 
+function group_updated(response) {
+	var order = JSON.parse(response.responseText);
+        for (i = 0; i < order.length; i++) {
+	     $(order[i]).setAttribute("class", "team team_" + parseInt(i + 1));
+	}
+}
 {% endif %}
 
 function init() {

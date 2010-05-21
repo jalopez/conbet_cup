@@ -72,7 +72,12 @@ class Match(Result):
             return u'%s - %s' % (self.home.code, self.visitor.code)
         else:
             return str(self.id)
-
+    def groupname(self):
+        try:
+            match = GroupMatch.objects.get(id=self.id)
+            return match.group.name
+        except GroupMatch.DoesNotExist:
+            return None
 
 class GroupMatch(Match):
     group = models.ForeignKey(Group)
