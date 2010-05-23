@@ -114,7 +114,7 @@ class WorldCupRules:
         return unranked_teams[0]
 
 
-    def rank_group(self, teams, matches):
+    def rank_group(self, teams, matches, with_points=False):
         ranking = []
         unranked_teams = teams
         played_matches = filter(
@@ -127,4 +127,7 @@ class WorldCupRules:
             ranking.append(first)
             unranked_teams = filter(lambda x: x != first, unranked_teams)
 
+        if with_points:
+            points = self.group_criteria[0].rank(teams,played_matches)
+            ranking = map(lambda x: (x, points[x]), ranking)
         return ranking

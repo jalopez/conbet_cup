@@ -131,7 +131,8 @@ function update_group(group) {
 function group_updated(response) {
 	var order = JSON.parse(response.responseText);
         for (i = 0; i < order.length; i++) {
-	     $(order[i]).setAttribute("class", "team team_" + parseInt(i + 1));
+	     $(order[i][0]).setAttribute("class", "team team_" + parseInt(i + 1));
+	     $$("#" + order[i][0] + " .points")[0].update(order[i][1]);
 	}
 }
 {% endif %}

@@ -113,8 +113,8 @@ def rank_group(request, groupname):
             visitor_goals=match_info['visitor_goals'],
             winner=match_info['winner']))
 
-    ranking = settings.RULES.rank_group(teams, results)
-    return HttpResponse(json.dumps(map(lambda t: t.code, ranking)),
+    ranking = settings.RULES.rank_group(teams, results, with_points=True)
+    return HttpResponse(json.dumps(map(lambda t: (t[0].code, t[1]), ranking)),
         content_type="text/json")
 
 ### Aux functions
