@@ -68,32 +68,6 @@ var points = {
 
 {% if editable %}
 function send() {
-	$H(bets).each(function(pair){
-	     match = pair.key;
-	     data = pair.value;
-             home_goals_id = match + "_h";
-	     visitor_goals_id = match + "_v";
-             radio_h_id = home_goals_id + "_win";
-	     radio_v_id = visitor_goals_id + "_win";
-             
-             data.home_goals = $(home_goals_id).value;
-	     data.visitor_goals = $(visitor_goals_id).value;
-	     
-	     // FIXME: think in a better way of checking if the bet is for the
-	     // first round or not
-	     if ($(radio_h_id).style.visibility != "hidden") {
-                  // Not the first round
-                  if (data.home_goals == data.visitor_goals) {
-                      if ($(radio_h_id).checked) {
-		          data.winner = 'H';
-                      } else {
-		          data.winner = 'V';
-                      }
-                  }
-	     }
-	});
-	
-	
 	var hidden = $("bets");
 	hidden.value = Object.toJSON(bets);
 	return true;
@@ -112,9 +86,9 @@ function changed(element) {
 	    }
 	} else {
 		if (new RegExp("h").test(element.id)) { // Home
-			bets[match_id].home_goals = element.value;
+			bets[match_id].home_goals = parseInt(element.value);
 		} else {
-			bets[match_id].visitor_goals = element.value;
+			bets[match_id].visitor_goals = parseInt(element.value);
 		}
 		if (bets[match_id].home_goals > bets[match_id].visitor_goals) {
 			bets[match_id].winner = "H";
@@ -123,31 +97,37 @@ function changed(element) {
 		}	
 	}
 	if (bets[match_id].group) {
-		group_matches = [];
-		
-		$H(bets).each(function(pair){ 
-			if (pair.value.group==bets[match_id].group) {
-				group_matches.push({
-					'id': parseInt(pair.key),
-					'home_goals': parseInt(pair.value.home_goals),
-					'visitor_goals': parseInt(pair.value.visitor_goals),
-					'winner': pair.value.winner
-				});
-			}
-		});
-		new Ajax.Request("rank_group/" + bets[match_id].group, {
-		     'method': 'post',
-		     'parameters': {
-			    'matches': Object.toJSON(group_matches)
-			},
- 	             'onSuccess': group_updated
-		}); 
-		
+		update_group(bets[match_id].group);		
 	} else {
 		update_rounds();
 	}
 	
 } 
+function update_group(group) {
+
+	group_matches = [];
+	
+	$H(bets).each(function(pair){ 
+		if (pair.value.group==group) {
+			group_matches.push({
+				'id': parseInt(pair.key),
+				'home_goals': parseInt(pair.value.home_goals),
+				'visitor_goals': parseInt(pair.value.visitor_goals),
+				'winner': pair.value.winner
+			});
+		}
+	});
+	new Ajax.Request("rank_group/" + group, {
+	     'method': 'post',
+	     'parameters': {
+		    'matches': Object.toJSON(group_matches)
+		},
+             'onSuccess': group_updated
+		}); 
+
+}
+
+
 function group_updated(response) {
 	var order = JSON.parse(response.responseText);
         for (i = 0; i < order.length; i++) {

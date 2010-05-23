@@ -4,8 +4,8 @@
         <div class="day">{{ match.date.day }}</div>
         <div class="hour">{{ match.date|date:"H:i" }}</div>
         <div class="location">{{ match.location|default:"--" }}</div>
-        <div class="teams"> <span id="{{ match.id }}_h">{{ match.home|default:"--" }}</span> - 
-            <span id="{{ match.id }}_v">{{ match.visitor|default:"--" }}</span> </div>
+        <div class="teams"> <span id="{{ match.id }}_h_team">{{ match.home|default:"--" }}</span> - 
+            <span id="{{ match.id }}_v_team">{{ match.visitor|default:"--" }}</span> </div>
         <div class="results">
             {% if editable %}
                 <input type="radio" id="{{ match.id }}_h_win" 
