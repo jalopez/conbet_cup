@@ -151,7 +151,7 @@ def cache_bet_teams(user):
 
         for q in Qualification.objects.filter(group=group):
             bet = user.bet_set.get(match=q.qualify_for)
-            team = ranking[q.position]
+            team = ranking[q.position-1]
             if team:
                 print("%d-th %s qualifies for %s (%s)" % (
                     q.position, q.group, q.qualify_for, q.side,
