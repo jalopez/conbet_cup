@@ -123,7 +123,18 @@ function changed(element) {
 		}	
 	}
 	if (bets[match_id].group) {
-		group_matches = $H(bets).findAll(function(element){element.group==bets[match_id].group});
+		group_matches = [];
+		
+		$H(bets).each(function(pair){ 
+			if (pair.value.group==bets[match_id].group) {
+				group_matches.push({
+					'id': parseInt(pair.key),
+					'home_goals': parseInt(pair.value.home_goals),
+					'visitor_goals': parseInt(pair.value.visitor_goals),
+					'winner': pair.value.winner
+				});
+			}
+		});
 		new Ajax.Request("rank_group/" + bets[match_id].group, {
 		     'method': 'post',
 		     'parameters': {
