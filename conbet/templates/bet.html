@@ -94,6 +94,10 @@ function changed(element) {
 			bets[match_id].winner = "H";
 		} else if (bets[match_id].home_goals < bets[match_id].visitor_goals) {
 			bets[match_id].winner = "V";
+		} else {
+			if (bets[match_id].group) {
+				bets[match_id].winner = "T";
+			}
 		}	
 	}
 	if (bets[match_id].group) {
