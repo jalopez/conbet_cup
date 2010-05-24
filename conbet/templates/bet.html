@@ -142,6 +142,7 @@ function group_updated(response) {
 {% endif %}
 
 function init() {
+	var groups = [];
 	$H(bets).each(function(pair){
 	     match = pair.key;
 	     data = pair.value;
@@ -159,18 +160,18 @@ function init() {
 	     $(visitor_goals_id).update(data.visitor_goals);
              {% endif %}
 	     
-	     // FIXME: think in a better way of checking if the bet is for the
-	     // first round or not
-	     if ($(radio_h_id).style.visibility != "hidden") {
+	     if (data.group == null) {
                   // Not the first round
                   if (data.winner == 'H') {
 		       $(radio_h_id).checked = true;     
                   } else {
                        $(radio_v_id).checked = true;
 		  }
-	     }
+	     } else {
+		  groups.push(data.group);
+	     }		
 	});
-
+	groups.uniq().each(update_group);
 }
 
 {% endblock %}
