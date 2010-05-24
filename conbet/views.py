@@ -146,7 +146,6 @@ def cache_bet_teams(user):
     for group in Group.objects.all():
 
         group_bets = []
-        #import ipdb; ipdb.set_trace()
         for match in GroupMatch.objects.filter(group=group):
             bet = get_object_or_404(Bet, match=match, owner=user)
             result = Result(home=match.home, visitor=match.visitor, 
@@ -164,8 +163,8 @@ def cache_bet_teams(user):
             bet = user.bet_set.get(match=q.qualify_for)
             team = ranking[q.position-1]
             if team:
-                print("%d-th %s qualifies for %s (%s)" % (
-                    q.position, q.group, q.qualify_for, q.side,
+                print("%s qualifies for %s (%s)" % (
+                    team, q.qualify_for, q.side,
                 ))
 
                 if q.side == 'H':
@@ -180,8 +179,8 @@ def cache_bet_teams(user):
                                match=q.round).get_position(q.position)
         bet = Bet.objects.get(owner=user, match=q.qualify_for)
         if team:
-            print("%d-th %s qualifies for %s (%s)" % (
-                q.position, q.round, q.qualify_for, q.side,
+            print("%d-th %s (%s) qualifies for %s (%s)" % (
+                q.position, q.round, team, q.qualify_for, q.side,
             ))
             if q.side == 'H':
                 bet.home = team
