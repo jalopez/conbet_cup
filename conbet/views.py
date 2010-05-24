@@ -144,11 +144,22 @@ def update_bet(request):
 def cache_bet_teams(user):
     # group classification
     for group in Group.objects.all():
+
+        group_bets = []
+        #import ipdb; ipdb.set_trace()
+        for match in GroupMatch.objects.filter(group=group):
+            bet = get_object_or_404(Bet, match=match, owner=user)
+            result = Result(home=match.home, visitor=match.visitor, 
+                            home_goals=bet.home_goals, 
+                            visitor_goals=bet.visitor_goals, 
+                            winner=bet.winner)
+            group_bets.append(result)
+
         ranking = settings.RULES.rank_group(
             group.team_set.all(),
-            GroupMatch.objects.filter(group=group, bet__owner=user),
+            group_bets
         )
-
+        
         for q in Qualification.objects.filter(group=group):
             bet = user.bet_set.get(match=q.qualify_for)
             team = ranking[q.position-1]
