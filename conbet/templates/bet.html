@@ -72,7 +72,7 @@ function send() {
 	hidden.value = Object.toJSON(bets);
 	return true;
 }
-
+{% endif %}
 function changed(element) {
 	var extract_id = new RegExp("\\d+");
 	var match_id = extract_id.exec(element.id)[0];
@@ -138,8 +138,38 @@ function group_updated(response) {
 	     $(order[i][0]).setAttribute("class", "team team_" + parseInt(i + 1));
 	     $$("#" + order[i][0] + " .points")[0].update(order[i][1]);
 	}
+	if (total_groups > 0) {
+		total_groups--;
+	}
+	if (total_groups == 0) { // There is a group not calculated yet
+		update_rounds();
+	}
 }
-{% endif %}
+
+function update_rounds() {
+    qualifications.each(function(q) {
+        if (q.group) {
+            var query = "#table_" + q.group;
+	    query += " .team_" + q.position;
+	    var orig_team = $$(query)[0];
+	    var team = teams[orig_team.id];
+        } else {
+	    if (q.position == 1) { // Winner
+	    	var team = $(q.round + "_" + bets[q.round].winner.toLowerCase() + "_team").innerHTML;    
+            } else {
+		var loser = 'v';
+		if (bets[q.round].winner == 'V') {
+		     loser = 'h';
+		}
+		var team = $(q.round + "_" + loser + "_team").innerHTML;
+	    }
+        }
+        var team_node = $(q.qualify_for + "_" + q.side.toLowerCase() + "_team");
+	team_node.update(team);
+    });
+}
+
+var total_groups = 0;
 
 function init() {
 	var groups = [];
@@ -171,7 +201,9 @@ function init() {
 		  groups.push(data.group);
 	     }		
 	});
-	groups.uniq().each(update_group);
+	var unique_groups = groups.uniq();
+	total_groups = unique_groups.size();
+	unique_groups.each(update_group);
 }
 
 {% endblock %}
