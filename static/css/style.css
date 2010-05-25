@@ -16,7 +16,7 @@ html, body {
     visibility: hidden;
 }
 #group_phase {
-    overflow: auto;
+    overflow: hidden;
 }
 .group {
     float:left;
@@ -59,3 +59,44 @@ html, body {
 	vertical-align: middle;
 	margin: 0 3px 3px 0;
 }
+#round_phase {
+    padding-top: 20px;
+}
+.round {
+    overflow: auto;
+    padding: 20px;
+    border: 1px solid #AAAAAA;
+    margin-bottom: 10px;
+
+}
+.wrap {
+    overflow: auto;
+    margin: 0px auto;
+}
+
+.round .match {
+    width: 25%;
+    float: left;
+}
+.round .title {
+    text-align: center;
+}
+
+.match {
+    position: relative;
+}
+.match .teams, .match .results, .match .location, .match .hour {
+    margin-left: 40px;
+}
+.match .month {
+    position: absolute;
+    left: 0px;
+    top: 10px;
+}
+.match .day {
+    position: absolute;
+    left: 0px;
+    top: 30px;
+    background-color: #EEEEEE;
+}
+

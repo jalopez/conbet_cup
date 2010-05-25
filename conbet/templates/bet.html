@@ -238,9 +238,11 @@ function init() {
 {% for round in rounds %}
   <div class="round">
         <div class="title">{{ round.0 }}</div>
+        <div class="wrap">
   	{% for match in round.1 %}
 	{% include "match.html" %}
   	{% endfor %}
+        </div>
   </div>
 {% endfor %}
 </div>
