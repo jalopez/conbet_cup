@@ -85,18 +85,30 @@ html, body {
 .match {
     position: relative;
 }
+.match .location, .match .hour, .match .month {
+    font-size: 70%;
+    color: #777777;
+}
 .match .teams, .match .results, .match .location, .match .hour {
-    margin-left: 40px;
+    margin-left: 45px;
 }
 .match .month {
     position: absolute;
     left: 0px;
-    top: 10px;
+    top: 5px;
+    background-color: white;
+    border: 1px solid #486793;
+    width: 39px;
+    text-align: center;
 }
 .match .day {
     position: absolute;
     left: 0px;
-    top: 30px;
-    background-color: #EEEEEE;
+    top: 20px;
+    width: 41px;
+    height: 28px;
+    background-color: #486793;
+    color: white;
+    text-align: center;
 }
 
