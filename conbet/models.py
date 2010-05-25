@@ -32,8 +32,8 @@ class Result(models.Model):
         ('V', 'Visitor'),
         ('T', 'Tie'),
     )
-    home = models.ForeignKey(Team, null=True, related_name='home_match')
-    visitor = models.ForeignKey(Team, null=True, related_name='visitor_match')
+    home = models.ForeignKey(Team, null=True, blank=True, related_name='home_match')
+    visitor = models.ForeignKey(Team, null=True, blank=True, related_name='visitor_match')
     home_goals = models.IntegerField(null=True, blank=True)
     visitor_goals = models.IntegerField(null=True, blank=True)
     winner = models.CharField(max_length=1, null=True, blank=True, choices=RESULT_CHOICES)
