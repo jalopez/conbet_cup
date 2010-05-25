@@ -106,7 +106,10 @@ function changed(element) {
 		update_rounds();
 	}
 	
-} 
+}
+
+var pending_groups = 0;
+ 
 function update_group(group) {
 
 	group_matches = [];
@@ -121,6 +124,7 @@ function update_group(group) {
 			});
 		}
 	});
+	pending_groups++;
 	new Ajax.Request("/rank_group/" + group, {
 	     'method': 'post',
 	     'parameters': {
@@ -138,10 +142,10 @@ function group_updated(response) {
 	     $(order[i][0]).setAttribute("class", "team team_" + parseInt(i + 1));
 	     $$("#" + order[i][0] + " .points")[0].update(order[i][1]);
 	}
-	if (total_groups > 0) {
-		total_groups--;
+	if (pending_groups > 0) {
+		pending_groups--;
 	}
-	if (total_groups == 0) { // There is a group not calculated yet
+	if (pending_groups == 0) {
 		update_rounds();
 	}
 }
@@ -169,7 +173,6 @@ function update_rounds() {
     });
 }
 
-var total_groups = 0;
 
 function init() {
 	var groups = [];
@@ -201,9 +204,7 @@ function init() {
 		  groups.push(data.group);
 	     }		
 	});
-	var unique_groups = groups.uniq();
-	total_groups = unique_groups.size();
-	unique_groups.each(update_group);
+	groups.uniq().each(update_group);
 }
 
 {% endblock %}
