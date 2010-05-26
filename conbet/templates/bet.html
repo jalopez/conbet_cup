@@ -214,6 +214,7 @@ function init() {
 <div id="wrapper">
 <div id="group_phase">
 {% for group in groups %}
+  <div class="column">
   <div class="group">
         <div class="title">{{ group.name }}</div>
   	<div class="team_table" id="table_{{ group.name }}">
@@ -231,6 +232,7 @@ function init() {
 	{% include "match.html" %}
   	{% endfor %}
   </div>
+  </div>
 {% endfor %}
 </div>
 
@@ -238,7 +240,7 @@ function init() {
 {% for round in rounds %}
   <div class="round">
         <div class="title">{{ round.0 }}</div>
-        <div class="wrap">
+        <div class="wrap r{{ round.1|length }}">
   	{% for match in round.1 %}
 	{% include "match.html" %}
   	{% endfor %}

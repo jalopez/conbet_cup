@@ -18,11 +18,18 @@ html, body {
 #group_phase {
     overflow: hidden;
 }
-.group {
+.column {
     float:left;
     width: 25%;
     min-height: 450px;
 }
+
+.group {
+    border: 1px solid #AAAAAA;
+    margin: 3px;
+    padding: 1ex;
+}
+
 .group .title {
 	margin: 0 auto 1ex;
 	font-size: 40px;
@@ -31,16 +38,19 @@ html, body {
 }
 .team_table {
     position: relative;
-    height: 100px;
+    height: 116px;
 }
 .team {
-	height: 25px;
+	height: 23px;
 	overflow: hidden;
 	border: 1px solid #A0B2BE;
+        padding: 1px 2px;
+        font-size: 90%;
 }
 .team .name {
 	float: left;
 	width: 80%;
+        
 }
 .team .points {
 	float: right;
@@ -51,13 +61,16 @@ html, body {
     width: 100%;
 }
 .team_1 { top: 0px; }
-.team_2 { top: 25px; }
-.team_3 { top: 50px; }
-.team_4 { top: 75px; }
+.team_2 { top: 27px; }
+.team_3 { top: 54px; }
+.team_4 { top: 81px; }
+.team_1, .team_3 {
+    background-color: #A0B2BE;
+}
 .team img {
 	width: 20px;
 	vertical-align: middle;
-	margin: 0 3px 3px 0;
+	margin: 0 3px 0 0;
 }
 #round_phase {
     padding-top: 20px;
@@ -74,6 +87,14 @@ html, body {
     margin: 0px auto;
 }
 
+.wrap.r2 .match:first-child {
+    margin-left: 25%;
+}
+
+.wrap.r1 .match:first-child {
+    margin-left: 37.5%;
+}
+
 .round .match {
     width: 25%;
     float: left;
@@ -86,7 +107,7 @@ html, body {
     position: relative;
     padding: 10px 0px;
 }
-.match .location, .match .hour, .match .month {
+.match .location, .match .hour {
     font-size: 70%;
     color: #777777;
 }
@@ -98,25 +119,28 @@ html, body {
 }
 
 .match .month {
-    color: black;
     position: absolute;
     left: 0px;
-    top: 15px;
+    top: 16px;
     background-color: white;
     border: 1px solid #486793;
     width: 40px;
     text-align: center;
+    padding-bottom: 2px;
+    font-size: 60%;
+    min-height: 12px;
 }
 .match .day {
     position: absolute;
     left: 0px;
-    top: 30px;
-    width: 41px;
+    top: 32px;
+    width: 42px;
     height: 28px;
     background-color: #486793;
     color: white;
     text-align: center;
     font-weight: bold;
+    padding-top: 5px;
 }
 select {
     font-size: 10px
