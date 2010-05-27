@@ -4,12 +4,32 @@ html, body {
 	font-size: 11pt;
 }
 
-#wrapper {
+#wrapper, #menu {
 	min-width: 800px;
 	max-width: 1000px;
 	margin: 1em auto;
 	background-color: white;
 	padding: 1em 2em;
+}
+
+#menu {
+    text-align: center;
+}
+
+a {
+    color: #486793;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#menu li {
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
 }
 
 #group_phase input {
