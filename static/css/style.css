@@ -167,5 +167,20 @@ a:hover {
     padding-top: 5px;
 }
 select {
-    font-size: 10px
+    font-size: 10px;
+}
+#ranking {
+    width: 100%;
+}
+#ranking th {
+    text-align: left;
+    border-bottom: 1px solid #AAAAAA;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+#ranking td {
+    padding: 0.5em;
+}
+#ranking tr.even {
+    background-color: #A0B2BE;
 }
