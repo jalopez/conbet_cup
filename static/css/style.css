@@ -50,11 +50,18 @@ a:hover {
     padding: 1ex;
 }
 
+.title {
+    margin: 0 auto 1ex;
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+    color: #486793;
+}
+
 .group .title {
-	margin: 0 auto 1ex;
-	font-size: 40px;
-	width: 40px;
-	text-align: center;
+    margin: 0 auto 1ex;
+    width: 40px;
+    font-size: 40px;
 }
 .team_table {
     position: relative;
@@ -118,9 +125,6 @@ a:hover {
 .round .match {
     width: 25%;
     float: left;
-}
-.round .title {
-    text-align: center;
 }
 
 .match {
