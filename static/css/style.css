@@ -135,11 +135,29 @@ a:hover {
     font-size: 70%;
     color: #777777;
 }
-.match .teams, .match .results, .match .location, .match .hour {
+.match .results, .match .location, .match .hour {
     margin-left: 50px;
 }
 .match .teams {
     font-size: 80%;
+    margin-left: 121px;
+    width: 1em;
+    position: relative;
+    text-align: center;
+}
+.match .teams .home, .match .teams .visitor {
+    position: absolute;
+    width: 78px;
+    overflow: hidden;
+    height: 1.4em;
+}
+.match .teams .home {
+    right: 1em;
+    text-align: right;
+}
+.match .teams .visitor {
+    left: 1em;
+    text-align: left;
 }
 
 .match .month {
@@ -165,6 +183,9 @@ a:hover {
     text-align: center;
     font-weight: bold;
     padding-top: 5px;
+}
+.match .results {
+    font-size: 80%;
 }
 select {
     font-size: 10px;
