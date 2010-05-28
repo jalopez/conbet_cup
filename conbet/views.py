@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 
 from django.contrib.auth.decorators import login_required
@@ -164,9 +165,9 @@ def cache_bet_teams(user):
             bet = user.bet_set.get(match=q.qualify_for)
             team = ranking[q.position-1]
             if team:
-                print("%s qualifies for %s (%s)" % (
-                    team, q.qualify_for, q.side,
-                ))
+                #print(u'%s qualifies for %s (%s)' % (
+                #    team, q.qualify_for, q.side,
+                #))
 
                 if q.side == 'H':
                     bet.home = team
@@ -180,9 +181,9 @@ def cache_bet_teams(user):
                                match=q.round).get_position(q.position)
         bet = Bet.objects.get(owner=user, match=q.qualify_for)
         if team:
-            print("%d-th %s (%s) qualifies for %s (%s)" % (
-                q.position, q.round, team, q.qualify_for, q.side,
-            ))
+            #print("%d-th %s (%s) qualifies for %s (%s)" % (
+            #    q.position, q.round, team, q.qualify_for, q.side,
+            #))
             if q.side == 'H':
                 bet.home = team
             else:

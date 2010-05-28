@@ -16,11 +16,14 @@ TEMPLATE_DIRS = (
 )
 STATIC_CONTENT_DIR = '/path/to/conber_cup/static'
 STATIC_URL = '/static'
+
 #####################################
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
+
+DEFAULT_CHARSET='utf-8'
 
 MANAGERS = ADMINS
 
