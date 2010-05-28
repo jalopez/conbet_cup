@@ -31,7 +31,7 @@ var bets = {
 {% endif %}: { 
 	'home_goals': {{ bet.home_goals|default:"0" }}, 
 	'visitor_goals': {{ bet.visitor_goals|default:"0" }},
-	'winner': '{{ bet.winner|default:"H" }}'
+	'winner': '{{ bet.winner|default:"T" }}'
 	{% if bet.match.groupname %}, 'group': '{{ bet.match.groupname }}' {% endif %}
 	
 }{% if not forloop.last %},{% endif %}
@@ -158,13 +158,20 @@ function update_rounds() {
 	    var orig_team = $$(query)[0];
 	    var team = teams[orig_team.id];
         } else {
+	    var winner;
+	    if (bets[q.round].winner == 'T') {
+		winner = 'h';
+	    } else {
+		winner = bets[q.round].winner.toLowerCase();
+	    }
+	    var loser = 'v';
+	    if (winner == 'v') {
+	    	loser = 'h';
+	    }
+
 	    if (q.position == 1) { // Winner
-	    	var team = $(q.round + "_" + bets[q.round].winner.toLowerCase() + "_team").innerHTML;    
+	    	var team = $(q.round + "_" + winner + "_team").innerHTML;    
             } else {
-		var loser = 'v';
-		if (bets[q.round].winner == 'V') {
-		     loser = 'h';
-		}
 		var team = $(q.round + "_" + loser + "_team").innerHTML;
 	    }
         }
@@ -195,7 +202,7 @@ function init() {
 	     
 	     if (data.group == null) {
                   // Not the first round
-                  if (data.winner == 'H') {
+                  if (data.winner == 'H' || data.winner == 'T') {
 		       $(radio_h_id).checked = true;     
                   } else {
                        $(radio_v_id).checked = true;
