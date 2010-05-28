@@ -4,7 +4,7 @@ html, body {
 	font-size: 11pt;
 }
 
-#wrapper, #menu {
+#wrapper, #menu, #header {
 	min-width: 800px;
 	max-width: 1000px;
 	margin: 1em auto;
@@ -30,6 +30,20 @@ a:hover {
     display: inline;
     list-style-type: none;
     padding-right: 20px;
+}
+
+#header h1 {
+    font-size: 350%;
+    margin: 1ex 0;
+    color: #486793;
+}
+#logo {
+    float: left;
+    height: 8em;
+}
+#logout {
+    text-align: right;
+    clear: both;
 }
 
 #group_phase input {
@@ -206,6 +220,6 @@ select {
 #ranking tr.even {
     background-color: #A0B2BE;
 }
-form {
+#wrapper form {
     text-align: center;
 }

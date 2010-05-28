@@ -15,6 +15,16 @@
 </script>
 </head> 
 <body onload="init()">
+{% if user.username %}
+{% url django.contrib.auth.views.logout as logout %}
+<div id="header">
+<img id="logo" src="{{ STATIC_URL }}/img/logo.png"/>
+    <h1>Conbet Cup</h1>
+
+    <div id="logout">
+    Bienvenido, {{ user.username }}. <a href="{{ logout }}">Salir</a>
+    </div>
+</div>
 <ul id="menu">
 {% url conbet.views.index as index %}
 <li><a href="{{ index }}">Home</a></li>
@@ -27,6 +37,7 @@
 <li>Normas</li>
 <li>Premios</li>
 </ul>
+{% endif %}
  {% block content %}
  {% endblock %}
 </body> 
