@@ -69,7 +69,7 @@ class Match(Result):
 
     def __unicode__(self):
         if self.home != None and self.visitor != None:
-            return u'%s - %s' % (self.home.code, self.visitor.code)
+            return u'%s - %s' % (self.home.name, self.visitor.name)
         else:
             return str(self.id)
     def groupname(self):
@@ -83,7 +83,7 @@ class GroupMatch(Match):
     group = models.ForeignKey(Group)
 
     def __unicode__(self):
-        return u'%s - %s' % (self.home.code, self.visitor.code)
+        return u'%s - %s' % (self.home.name, self.visitor.name)
 
 
 class Round(Match):
@@ -94,8 +94,8 @@ class Round(Match):
     STAGE_NAMES={
         1: 'Final',
         2: 'Semifinal',
-        3: 'Quarter-final',
-        4: 'Round-of-16',
+        3: 'Quartos de final',
+        4: 'Octavos de final',
     }
 
     def __unicode__(self):
