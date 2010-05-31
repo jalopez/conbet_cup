@@ -6,7 +6,7 @@ class Group(models.Model):
     name = models.CharField(max_length=15, primary_key=True)
     
     def __unicode__(self):
-        return self.name
+        return unicode(self.name)
 
     def get_position(self, position):
         return self.team_set.get(group_order=position)
@@ -23,7 +23,7 @@ class Team(models.Model):
     group_order = models.IntegerField()
 
     def __unicode__(self):
-        return self.name
+        return unicode(self.name)
 
 
 class Result(models.Model):
@@ -68,15 +68,21 @@ class Match(Result):
     location = models.CharField(max_length=50, null=True, blank=True)
 
     def __unicode__(self):
-        if self.home != None and self.visitor != None:
+        if self.groupname() != None:
             return u'%s - %s' % (self.home.name, self.visitor.name)
         else:
-            return str(self.id)
+            return u'%s' % (self.round_obj())
     def groupname(self):
         try:
             match = GroupMatch.objects.get(id=self.id)
             return match.group.name
         except GroupMatch.DoesNotExist:
+            return None
+    def round_obj(self):
+        try:
+            round = Round.objects.get(id=self.id)
+            return round
+        except Round.DoesNotExist:
             return None
 
 class GroupMatch(Match):
@@ -99,7 +105,7 @@ class Round(Match):
     }
 
     def __unicode__(self):
-        return "%s %d" % (self.STAGE_NAMES[self.stage], self.order)
+        return u'%s %d' % (self.STAGE_NAMES[self.stage], self.order)
 
 
 class Bet(Result):
@@ -107,7 +113,7 @@ class Bet(Result):
     match = models.ForeignKey(Match)
 
     def __unicode__(self):
-        return "%s on %s" % (self.owner, self.match)
+        return u'%s on %s' % (self.owner, self.match)
 
 
 class Qualification(models.Model):
