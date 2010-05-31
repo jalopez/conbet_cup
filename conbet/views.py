@@ -241,7 +241,16 @@ def score_bet(user):
                                 sr.score_round(bet, round))
         except Bet.DoesNotExist:
             pass # partial bet
-        
+    
+    # The final
+    try:
+        final = Round.objects.get(stage=1,order=1)
+        bet = Bet.objects.get(owner=user, match=final)
+        match_points += map(lambda x: ('winner', x[0], x[1]),
+                            sr.score_cup_winner(bet, final))
+    except Bet.DoesNotExist, Round.DoesNotExist:
+        pass
+
     return { 'match_points': group_list(match_points),
              'group_points': group_list(group_points), }
 

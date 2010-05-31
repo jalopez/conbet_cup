@@ -26,8 +26,10 @@ class WorldCupScoreRules:
         * match.teams
         * match.goals
         * match.winner
+        * match.all
         * group.all
         * group.team
+        * cup.winner
     """
 
     def score_group_match(self, bet, match):
@@ -43,6 +45,7 @@ class WorldCupScoreRules:
             return [(1, 'match.goals')]
         else: 
             return []
+
 
 
     def score_group_classification(self, bet_ranking, ranking):
@@ -87,4 +90,17 @@ class WorldCupScoreRules:
         elif guessed_teams == 1:
             points.append((factor, 'match.teams'))
 
+        # all together
+        if guessed_teams == 2 and guessed_goals == 2 and bet.winner == match.winner:
+            points.append((factor, 'match.all'))
+
+        return points
+    
+    def score_cup_winner(self, bet, match):
+        points = []
+        if bet.winner == match.winner:
+            if match.winner == 'H' and bet.home_team == match.home_team:
+                points.append((20, 'cup.winner'))
+            if match.winner == 'V' and bet.visitor_team == match.visitor_team: 
+                points.append((20, 'cup.winner'))
         return points
