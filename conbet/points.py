@@ -39,13 +39,17 @@ class WorldCupScoreRules:
         punctuation = [(<points>, <reason>)]
         """
         sides = same_goals(bet, match)
+        points = []
         if sides == 2:
-            return [(3, 'match.goals')]
+            points.append((3, 'match.goals'))
         elif sides == 1:
-            return [(1, 'match.goals')]
-        else: 
-            return []
+            points.append((1, 'match.goals'))
 
+        # winner
+        if bet.winner == match.winner:
+            points.append((2, 'match.winner'))
+        
+        return points
 
 
     def score_group_classification(self, bet_ranking, ranking):
@@ -56,10 +60,12 @@ class WorldCupScoreRules:
         """
         matches = len(filter(lambda r: r[0] == r[1], 
                              zip(bet_ranking, ranking)))
+
+        # TODO: right qualifyed teams, but in wrong order
         if matches == 4:
-            return [(5, 'group.all')]
+            return [(10, 'group.all')]
         else:
-            return [(matches, 'group.team')]
+            return [(matches*2, 'group.team')]
 
 
     def score_round(self, bet, match):
