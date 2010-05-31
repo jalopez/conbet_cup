@@ -28,8 +28,6 @@
 <ul id="menu">
 {% url conbet.views.index as index %}
 <li><a href="{{ index }}">Home</a></li>
-{% url conbet.views.ranking as ranking %}
-<li><a href="{{ ranking }}">Clasificación</a></li>
 {% url conbet.views.results as results %}
 <li><a href="{{ results }}">Resultados Reales</a></li>
 {% url conbet.views.bet user.username as my_bet %}
