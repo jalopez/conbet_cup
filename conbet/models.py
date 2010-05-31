@@ -92,9 +92,9 @@ class Round(Match):
     order = models.IntegerField() 
 
     STAGE_NAMES={
-        1: 'Final',
+        1: 'Final - 3 y 4 puesto',
         2: 'Semifinal',
-        3: 'Quartos de final',
+        3: 'Cuartos de final',
         4: 'Octavos de final',
     }
 
