@@ -220,6 +220,6 @@ select {
 #ranking tr.even {
     background-color: #A0B2BE;
 }
-#wrapper form {
+form#betting {
     text-align: center;
 }

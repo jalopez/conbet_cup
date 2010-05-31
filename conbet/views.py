@@ -3,22 +3,22 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseServerError
+from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseServerError, HttpResponseRedirect
 from django.shortcuts import get_list_or_404, get_object_or_404, render_to_response
 from django.contrib.auth.models import User
 from django.template import RequestContext
 
 from conbet.models import Match, Bet, GroupMatch, Round, Group, Qualification, Result, Team
 
-@login_required
 def index(request):
     if settings.BETTING:
-        return edit_bet(request)
+        if request.user.is_authenticated():
+            return edit_bet(request)
+        else:
+            return HttpResponseRedirect("login/?next=/")
     else:
         return ranking(request)
 
-
-@login_required
 def ranking(request):
     users = []
     position = 0

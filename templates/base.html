@@ -4,25 +4,28 @@
 <head> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Conbet cup</title>
-	<link type="text/css" href="{{ STATIC_URL }}/css/style.css" rel="stylesheet" />
+        <link type="text/css" href="{{ STATIC_URL }}/css/style.css" rel="stylesheet" />
 <script type="text/javascript" 
     src="{{ STATIC_URL }}/lib/prototype.js"></script>
 
 <script type="text/javascript">
  {% block script %}
-	function init() {}
+        function init() {}
  {% endblock %}
 </script>
 </head> 
 <body onload="init()">
-{% if user.username %}
-{% url django.contrib.auth.views.logout as logout %}
 <div id="header">
 <img id="logo" src="{{ STATIC_URL }}/img/logo.png"/>
     <h1>Conbet Cup</h1>
-
     <div id="logout">
-    Bienvenido, {{ user.username }}. <a href="{{ logout }}">Salir</a>
+    {% if user.username %}
+        {% url django.contrib.auth.views.logout as logout %}
+        Bienvenido, {{ user.username }}. <a href="{{ logout }}">Salir</a>
+    {% else %}
+        {% url django.contrib.auth.views.login as login %}
+        <a href="{{ login }}">Log in</a>
+    {% endif %}
     </div>
 </div>
 <ul id="menu">
@@ -35,7 +38,6 @@
 {% url conbet.views.rules as rules %}
 <li><a href="{{ rules }}">Normas</a></li>
 </ul>
-{% endif %}
  {% block content %}
  {% endblock %}
 </body> 
