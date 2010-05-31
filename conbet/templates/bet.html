@@ -90,16 +90,18 @@ function changed(element) {
         } else {
             bets[match_id].visitor_goals = parseInt(element.value);
         }
-        if (bets[match_id].home_goals > bets[match_id].visitor_goals) {
-            bets[match_id].winner = "H";
-        } else if (bets[match_id].home_goals < bets[match_id].visitor_goals) {
-            bets[match_id].winner = "V";
-        } else {
-            if (bets[match_id].group) {
-                bets[match_id].winner = "T";
-            }
-        }       
     }
+    if (bets[match_id].home_goals > bets[match_id].visitor_goals) {
+        bets[match_id].winner = "H";
+        $(match_id + "_" + 'h' + "_win").checked = "true";
+    } else if (bets[match_id].home_goals < bets[match_id].visitor_goals) {
+        bets[match_id].winner = "V";
+        $(match_id + "_" + 'v' + "_win").checked = "true";
+    } else {
+        if (bets[match_id].group) {
+            bets[match_id].winner = "T";
+        }
+    }       
     if (bets[match_id].group) {
         update_group(bets[match_id].group);             
     } else {
