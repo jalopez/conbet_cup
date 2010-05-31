@@ -17,6 +17,13 @@ def same_teams(result1, result2):
         sides += 1
     return sides
 
+def unordered_qualifying_teams(bet_ranking, ranking):
+    teams = 0
+    if ranking[0] == bet_ranking[1]:
+        teams += 1
+    if ranking[1] == bet_ranking[0]:
+        teams += 1
+    return teams
 
 class WorldCupScoreRules:
     """
@@ -29,6 +36,7 @@ class WorldCupScoreRules:
         * match.all
         * group.all
         * group.team
+        * group.unordered
         * cup.winner
     """
 
@@ -61,12 +69,21 @@ class WorldCupScoreRules:
         matches = len(filter(lambda r: r[0] == r[1], 
                              zip(bet_ranking, ranking)))
 
-        # TODO: right qualifyed teams, but in wrong order
+        points = []
         if matches == 4:
-            return [(10, 'group.all')]
+            points.append((10, 'group.all'))
         else:
-            return [(matches*2, 'group.team')]
+            points.append((matches*2, 'group.team'))
 
+        # unordered qualifyed teams
+        teams = unordered_qualifying_teams(bet_ranking, ranking):
+
+        if teams == 2:
+            points.append((3, 'group.unordered'))
+        else:
+            points.append((teams, 'group.unordered'))
+
+        return points
 
     def score_round(self, bet, match):
         """
