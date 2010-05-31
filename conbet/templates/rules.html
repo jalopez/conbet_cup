@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="wrapper">
+<h2>Instrucciones para rellenar la Porra</h2>
+{% url conbet.views.index as index %}
+    <p>
+        Todo usuario tiene derecho a realizar una única apuesta,
+        rellenando <a href="{{ index }}">el formulario</a> adecuado. 
+        Antes de poder rellenar la apuesta deberá estar autenticado, 
+        con el usuario y la contraseña que recibirá por correo. 
+        La apuesta podrá editarse y modificarse tantas veces como se desee, 
+        hasta las 16:00 horas del día 6 de Junio de 2008, (un día antes del 
+        inicio del Mundial). Si una persona quisiera realizar más de 
+        una apuesta, deberá solicitar un usuario distinto por apuesta. 
+        Cada participante es responsable de verificar que su propia 
+        apuesta mostrada por el sistema es la definitiva.
+     </p>
+     <p>
+        El precio de la apuesta es de 5 &euro;.
+     </p>
+     <p>
+        Cada apuesta consiste en:
+     </p>
+     <ul>
+        <li>
+            Determinar los resultados de todos los partidos de 
+            la primera fase.
+        </li>
+        <li>
+            Por medio de dichos resultados se calcula automáticamente 
+            el orden de los grupos, incluyendo a las selecciones que 
+            se clasifican. También se generan automáticamente las 
+            selecciones que pasan a jugar los partidos de la siguiente ronda.
+        </li>
+        <li>
+            Para la fase final (octavos, cuartos, semifinales y final), habrá
+            que determinar el resultado de los distintos partidos,
+            generándose así el cuadro hasta llegar al campeón. Cuando una
+            selección aparece como ganadora en un partido según el resultado 
+            introducido, automáticamente pasa a jugar el partido correspondiente 
+            de la siguiente fase.
+        </li>
+        <li>
+            En los partidos de la fase final, puede indicarse que un partido termina 
+            en empate (incluyendo prórroga), por lo que en este caso habrá de 
+            marcarse además la selección que ganará en penaltis.
+        </li>
+        <li>
+            Los resultados introducidos incluyen, en todo caso, prórroga si la
+            hubiera, excluyendo del resultado pronosticado los goles marcados en
+            una hipotética ronda de penaltis.
+        </li>
+    </ul>
+    <h2>Puntuación de la Porra</h2>
+    <p>
+        Una vez rellenada la apuesta y comenzado el torneo, los usuarios
+        empezarán a recibir puntos si sus predicciones han sido adecuadas. 
+        El sistema calcula automáticamente la puntuación de cada participante, 
+        lo que se realiza utilizando el criterio siguiente:
+    </p>
+    <h3>Primera Fase</h3>
+    <p>
+        En la primera fase, para cada partido, se sumará 1 punto por cada lado 
+        del resultado acertado, y 3 si se acierta el resultado completo.
+    </p>
+    <p>
+        Ej. Si en el España - Rusia un usuario pronosticó un 2-0 y el resultado 
+        real es 2-1, el usuario recibirá 1 punto (por los dos goles de España). 
+        Sin embargo, si el resultado real fuera 2-0, sumaría 3 puntos en ese partido.
+    </p>
+    <p>
+        Al final de la primera fase (cuando todos los partidos estén jugados), 
+        se sumarán los puntos relativos a la clasificación de los distintos grupos. 
+        Cada selección correctamente posicionada en su grupo sumará 1 punto. 
+        Un grupo entero correctamente ordenado sumará un total de 5 puntos.
+    </p>
+    <p>
+        NOTA: Para determinar el orden de un grupo, se utilizan los criterios de
+        la FIFA. Sin embargo, existe una posibilidad de que dos equipos queden
+        empatados a "todo" al terminar la fase de grupos. En ese caso, la FIFA
+        aplicaría un sorteo para decidir el orden final. Al rellenar la porra no
+        es posible tener en cuenta este caso, por lo que el orden lo determinará
+        el sistema automáticamente, no siendo posible modificarlo.
+    </p>
+    <h3>Fase Final</h3>
+    <p>
+        En la fase final se suman puntos por dos conceptos: goles acertados en 
+        cada partido y selección correctamente posicionada en dicho partido 
+        (respetando la actuación de "visitante" o "local" en dicho partido, 
+        es decir, importa si está en un partido en la izquierda o derecha 
+        del marcador). Estos conceptos son independientes, se puede sumar 
+        puntos por el resultado de un partido sin haber situado las 
+        selecciones correctas. Es importante hacer notar que todos los puntos 
+        para cada eliminatoria se calcularán cuando se haya celebrado el 
+        partido y no antes, por lo que acertar alguno de los equipos de la 
+        eliminatoria no se verá reflejado en la puntuación hasta después de 
+        celebrado el partido.
+    </p>
+    <p>
+        Los puntos sumados, tanto por resultados como por equipos clasificados
+        dependerán de la ronda concreta que se trate (cuartos, semifinal, etc.)
+        Los puntos sumados por los resultados puestos, en cada ronda, son:
+    </p>
+    <ul>
+        <li>
+            Octavos:
+            <ul>
+                <li>
+                    Goles: 2 puntos por lado, 6 si son ambos lados. 2 puntos más en
+                    caso de acertar el ganador (para empates)
+                </li>
+                <li>
+                    Equipos: 2 puntos por acertar una selección. 6 en caso de
+                    acertar ambas.
+                </li>
+                <li>
+                    Si se aciertan tanto los dos equipos como el resultado exacto,
+                    se sumarán 2 puntos más además de lo sumado por otros criterios.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Cuartos:
+            <ul>
+                <li>
+                    Goles: 3 puntos por lado, 9 si son ambos lados. 3 puntos más en
+                    caso de acertar el ganador (para empates)
+                </li>
+                <li>
+                    Equipos: 3 puntos por acertar una selección. 9 en caso de
+                    acertar ambas.
+                </li>
+                <li>
+                    Si se aciertan tanto los dos equipos como el resultado exacto,
+                    se sumarán 3 puntos más además de lo sumado por otros criterios.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Semifinal:
+            <ul>
+                <li>
+                    Goles: 4 puntos por lado, 12 si son ambos lados. 4 puntos más en
+                    caso de acertar el ganador (para empates)
+                </li>
+                <li>
+                    Equipos: 4 puntos por acertar una selección. 12 en caso de
+                    acertar ambas.
+                </li>
+                <li>
+                    Si se aciertan tanto los dos equipos como el resultado exacto,
+                    se sumarán 4 puntos más además de lo sumado por otros criterios.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Final / Final de consolación (3 y 4 puesto):
+            <ul>
+                <li>
+                    Goles: 5 puntos por lado, 15 si son ambos lados. 5 puntos más en
+                    caso de acertar el ganador (para empates)
+                </li>
+                <li>
+                    Equipos: 5 puntos por acertar una selección. 15 en caso de
+                    acertar ambas.
+                </li>
+                <li>
+                    Si se aciertan tanto los dos equipos como el resultado exacto,
+                    se sumarán 5 puntos más además de lo sumado por otros criterios.
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <h3>Ganador del Torneo</h3>
+    <p>
+        Acertar la selección que gane la Eurocopa tiene premio, otros 20 puntos.
+    </p>
+    <h2>Reparto de Premios</h2>
+        <p>
+            Cada participante obtendrá un número de puntos como resultado de 
+            acumular los puntos obtenidos en cada fase. Se establece un primer 
+            premio, que se llevará el 60 % de todo el dinero recaudado, 
+            un segundo premio que se llevará el 25 % y tres terceros premios 
+            a los que les corresponde un 5% a cada uno. Las fracciones decimales 
+            de euro son para el primer premio. Hay también un premio de
+            consolación, al último clasificado, que consiste en la
+            devolución del dinero desembolsado (si hay más de un perdedor, se 
+            reparten entre ellos el importe correspondiente a uno de los 
+            participantes). El dinero reservado al último no se contabiliza 
+            para el resto de premios.
+        </p>
+        <p>
+            El primer premio lo ganará  aquel participante que consiga más puntos. 
+            Si hay dos participantes empatados en el primer lugar, se repartirán 
+            también el segundo premio. Si hay más de dos empatados en primer lugar, 
+            se repartirán el segundo premio y tantos terceros como número de ganadores 
+            que exceda de 2 (si son 3 los ganadores se reparten el primer premio, 
+            el segundo y un tercero, si son 4 se reparten primero segundo y dos 
+            terceros y si son cinco o más se reparten el 100 % del dinero recaudado).
+        </p>
+        <p>
+            Se seguirá el mismo criterio a la hora de repartir el segundo premio 
+            y los terceros.
+        </p>
+        <p>
+            Solo participarán las porras que estén abonadas y enviadas on-line antes 
+            de las 18:00 horas del día 10 de Junio de 2010. Hasta ese mismo momento 
+            los participantes pueden modificar su apuesta, participando únicamente 
+            con la última salvada.
+        </p>
+        <p>
+            La cantidad que se debe desembolsar para participar es de 5 &euro;.
+        </p>
+</div>
+{% endblock %}
