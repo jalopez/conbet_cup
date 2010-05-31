@@ -18,7 +18,7 @@ var qualifications = [
 
 var teams = {
 {% for team in teams %}
-	{{ team.code }}: "{{ team.name|trim|safe }}" {% if not forloop.last %},{% endif %}
+        {{ team.code }}: "{{ team.name|trim|safe }}" {% if not forloop.last %},{% endif %}
 {% endfor %}
 };
 
@@ -29,11 +29,11 @@ var bets = {
 {% else %}
     {{ bet.id }}
 {% endif %}: { 
-	'home_goals': {{ bet.home_goals|default:"0" }}, 
-	'visitor_goals': {{ bet.visitor_goals|default:"0" }},
-	'winner': '{{ bet.winner|default:"T" }}'
-	{% if bet.match.groupname %}, 'group': '{{ bet.match.groupname }}' {% endif %}
-	
+        'home_goals': {{ bet.home_goals|default:"0" }}, 
+        'visitor_goals': {{ bet.visitor_goals|default:"0" }},
+        'winner': '{{ bet.winner|default:"T" }}'
+        {% if bet.match.groupname %}, 'group': '{{ bet.match.groupname }}' {% endif %}
+        
 }{% if not forloop.last %},{% endif %}
 {% endfor %}
 };
@@ -68,150 +68,148 @@ var points = {
 
 {% if editable %}
 function send() {
-	var hidden = $("bets");
-	hidden.value = Object.toJSON(bets);
-	return true;
+    var hidden = $("bets");
+    hidden.value = Object.toJSON(bets);
+    return true;
 }
 {% endif %}
 function changed(element) {
-	var extract_id = new RegExp("\\d+");
-	var match_id = extract_id.exec(element.id)[0];
-	if (element.type == "radio") { // A radio button
-		if (bets[match_id]["home_goals"] == bets[match_id]["visitor_goals"]) {
-		if (new RegExp("h").test(element.id)) { // Home 
-	   		bets[match_id].winner = "H";
-		} else {
-			bets[match_id].winner = "V";
-		}
-	    }
-	} else {
-		if (new RegExp("h").test(element.id)) { // Home
-			bets[match_id].home_goals = parseInt(element.value);
-		} else {
-			bets[match_id].visitor_goals = parseInt(element.value);
-		}
-		if (bets[match_id].home_goals > bets[match_id].visitor_goals) {
-			bets[match_id].winner = "H";
-		} else if (bets[match_id].home_goals < bets[match_id].visitor_goals) {
-			bets[match_id].winner = "V";
-		} else {
-			if (bets[match_id].group) {
-				bets[match_id].winner = "T";
-			}
-		}	
-	}
-	if (bets[match_id].group) {
-		update_group(bets[match_id].group);		
-	} else {
-		update_rounds();
-	}
-	
+    var extract_id = new RegExp("\\d+");
+    var match_id = extract_id.exec(element.id)[0];
+    if (element.type == "radio") { // A radio button
+        if (bets[match_id]["home_goals"] == bets[match_id]["visitor_goals"]) {
+            if (new RegExp("h").test(element.id)) { // Home 
+                bets[match_id].winner = "H";
+            } else {
+                bets[match_id].winner = "V";
+            }
+        }
+    } else {
+        if (new RegExp("h").test(element.id)) { // Home
+            bets[match_id].home_goals = parseInt(element.value);
+        } else {
+            bets[match_id].visitor_goals = parseInt(element.value);
+        }
+        if (bets[match_id].home_goals > bets[match_id].visitor_goals) {
+            bets[match_id].winner = "H";
+        } else if (bets[match_id].home_goals < bets[match_id].visitor_goals) {
+            bets[match_id].winner = "V";
+        } else {
+            if (bets[match_id].group) {
+                bets[match_id].winner = "T";
+            }
+        }       
+    }
+    if (bets[match_id].group) {
+        update_group(bets[match_id].group);             
+    } else {
+        update_rounds();
+    }
 }
 
 var pending_groups = 0;
  
 function update_group(group) {
 
-	group_matches = [];
-	
-	$H(bets).each(function(pair){ 
-		if (pair.value.group==group) {
-			group_matches.push({
-				'id': parseInt(pair.key),
-				'home_goals': parseInt(pair.value.home_goals),
-				'visitor_goals': parseInt(pair.value.visitor_goals),
-				'winner': pair.value.winner
-			});
-		}
-	});
-	pending_groups++;
-	new Ajax.Request("/rank_group/" + group, {
-	     'method': 'post',
-	     'parameters': {
-		    'matches': Object.toJSON(group_matches)
-		},
+    group_matches = [];
+        
+    $H(bets).each(function(pair){ 
+        if (pair.value.group==group) {
+            group_matches.push({
+                                'id': parseInt(pair.key),
+                                'home_goals': parseInt(pair.value.home_goals),
+                                'visitor_goals': parseInt(pair.value.visitor_goals),
+                                'winner': pair.value.winner
+                                });
+        }
+    });
+    pending_groups++;
+    new Ajax.Request("/rank_group/" + group, {
+             'method': 'post',
+             'parameters': {
+                    'matches': Object.toJSON(group_matches)
+                },
              'onSuccess': group_updated
-		}); 
-
+    }); 
 }
 
 
 function group_updated(response) {
-	var order = JSON.parse(response.responseText);
-        for (i = 0; i < order.length; i++) {
-	     $(order[i][0]).setAttribute("class", "team team_" + parseInt(i + 1));
-	     $$("#" + order[i][0] + " .points")[0].update(order[i][1]);
-	}
-	if (pending_groups > 0) {
-		pending_groups--;
-	}
-	if (pending_groups == 0) {
-		update_rounds();
-	}
+    var order = JSON.parse(response.responseText);
+    for (i = 0; i < order.length; i++) {
+        $(order[i][0]).setAttribute("class", "team team_" + parseInt(i + 1));
+        $$("#" + order[i][0] + " .points")[0].update(order[i][1]);
+    }
+    if (pending_groups > 0) {
+        pending_groups--;
+    }
+    if (pending_groups == 0) {
+        update_rounds();
+    }
 }
 
 function update_rounds() {
     qualifications.each(function(q) {
         if (q.group) {
             var query = "#table_" + q.group;
-	    query += " .team_" + q.position;
-	    var orig_team = $$(query)[0];
-	    var team = teams[orig_team.id];
+            query += " .team_" + q.position;
+            var orig_team = $$(query)[0];
+            var team = teams[orig_team.id];
         } else {
-	    var winner;
-	    if (bets[q.round].winner == 'T') {
-		winner = 'h';
-	    } else {
-		winner = bets[q.round].winner.toLowerCase();
-	    }
-	    var loser = 'v';
-	    if (winner == 'v') {
-	    	loser = 'h';
-	    }
-
-	    if (q.position == 1) { // Winner
-	    	var team = $(q.round + "_" + winner + "_team").innerHTML;    
+            var winner;
+            if (bets[q.round].winner == 'T') {
+                winner = 'h';
             } else {
-		var team = $(q.round + "_" + loser + "_team").innerHTML;
-	    }
+                winner = bets[q.round].winner.toLowerCase();
+            }
+            var loser = 'v';
+            if (winner == 'v') {
+                loser = 'h';
+            }
+
+            if (q.position == 1) { // Winner
+                var team = $(q.round + "_" + winner + "_team").innerHTML;    
+            } else {
+                var team = $(q.round + "_" + loser + "_team").innerHTML;
+            }
         }
         var team_node = $(q.qualify_for + "_" + q.side.toLowerCase() + "_team");
-	team_node.update(team);
+        team_node.update(team);
     });
 }
 
 
 function init() {
-	var groups = [];
-	$H(bets).each(function(pair){
-	     match = pair.key;
-	     data = pair.value;
-             // Getting the DOM ids for input data
-             home_goals_id = match + "_h";
-	     visitor_goals_id = match + "_v";
-             radio_h_id = home_goals_id + "_win";
-	     radio_v_id = visitor_goals_id + "_win";
+    var groups = [];
+    $H(bets).each(function(pair){
+        match = pair.key;
+        data = pair.value;
+        // Getting the DOM ids for input data
+        home_goals_id = match + "_h";
+        visitor_goals_id = match + "_v";
+        radio_h_id = home_goals_id + "_win";
+        radio_v_id = visitor_goals_id + "_win";
+   
+        {% if editable %}
+        $(home_goals_id).value = data.home_goals;
+        $(visitor_goals_id).value = data.visitor_goals;
+        {% else %}
+        $(home_goals_id).update(data.home_goals);
+        $(visitor_goals_id).update(data.visitor_goals);
+        {% endif %}
              
-             {% if editable %}
-	     $(home_goals_id).value = data.home_goals;
-	     $(visitor_goals_id).value = data.visitor_goals;
-             {% else %}
-	     $(home_goals_id).update(data.home_goals);
-	     $(visitor_goals_id).update(data.visitor_goals);
-             {% endif %}
-	     
-	     if (data.group == null) {
-                  // Not the first round
-                  if (data.winner == 'H' || data.winner == 'T') {
-		       $(radio_h_id).checked = true;     
-                  } else {
-                       $(radio_v_id).checked = true;
-		  }
-	     } else {
-		  groups.push(data.group);
-	     }		
-	});
-	groups.uniq().each(update_group);
+        if (data.group == null) {
+            // Not the first round
+            if (data.winner == 'H' || data.winner == 'T') {
+                $(radio_h_id).checked = true;     
+            } else {
+                $(radio_v_id).checked = true;
+            }
+        } else {
+            groups.push(data.group);
+        }          
+    });
+    groups.uniq().each(update_group);
 }
 
 {% endblock %}
@@ -224,20 +222,20 @@ function init() {
   <div class="column">
   <div class="group">
         <div class="title">{{ group.name }}</div>
-  	<div class="team_table" id="table_{{ group.name }}">
-		{% for team in group.team_set.values %}
-		 <div class="team team_{{ forloop.counter }}" id="{{ team.code }}"> 
-		    <div class="name">
-	                 <img src="{{ STATIC_URL }}/img/flags/{{ team.code }}.png" />
-			 {{ team.name }}
-		    </div>
-		    <div class="points"> - </div>
+        <div class="team_table" id="table_{{ group.name }}">
+                {% for team in group.team_set.values %}
+                 <div class="team team_{{ forloop.counter }}" id="{{ team.code }}"> 
+                    <div class="name">
+                         <img src="{{ STATIC_URL }}/img/flags/{{ team.code }}.png" />
+                         {{ team.name }}
+                    </div>
+                    <div class="points"> - </div>
                  </div>
-		{% endfor %}
-	</div>
-	{% for match in group.matches %}
-	{% include "match.html" %}
-  	{% endfor %}
+                {% endfor %}
+        </div>
+        {% for match in group.matches %}
+        {% include "match.html" %}
+        {% endfor %}
   </div>
   </div>
 {% endfor %}
@@ -248,9 +246,9 @@ function init() {
   <div class="round">
         <div class="title">{{ round.0 }}</div>
         <div class="wrap r{{ round.1|length }}">
-  	{% for match in round.1 %}
-	{% include "match.html" %}
-  	{% endfor %}
+        {% for match in round.1 %}
+        {% include "match.html" %}
+        {% endfor %}
         </div>
   </div>
 {% endfor %}
