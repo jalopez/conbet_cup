@@ -131,7 +131,10 @@ function update_group(group) {
              'parameters': {
                     'matches': Object.toJSON(group_matches)
                 },
-             'onSuccess': group_updated
+             'onSuccess': group_updated,
+             'on403': function() {
+                 window.location.reload();
+             }
     }); 
 }
 

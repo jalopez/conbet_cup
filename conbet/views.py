@@ -101,8 +101,9 @@ def results(request):
     }, context_instance=RequestContext(request))
 
 
-@login_required
 def rank_group(request, groupname):
+    if not request.user.is_authenticated():
+        return HttpResponseForbidden()
     group_matches = json.loads(request.POST.get('matches'))
 
     group = get_object_or_404(Group, name=groupname)
