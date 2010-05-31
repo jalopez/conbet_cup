@@ -21,7 +21,9 @@
     <div id="logout">
     {% if user.username %}
         {% url django.contrib.auth.views.logout as logout %}
-        Bienvenido, {{ user.username }}. <a href="{{ logout }}">Salir</a>
+	{% url admin:password_change as password %}
+        Bienvenido/a, {{ user.username }}. <a href="{{ password }}">Cambiar contraseña</a>
+	/ <a href="{{ logout }}">Terminar sesión</a>
     {% else %}
         {% url django.contrib.auth.views.login as login %}
         <a href="{{ login }}">Log in</a>
