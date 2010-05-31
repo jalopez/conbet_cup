@@ -62,32 +62,36 @@
     <h3>Primera Fase</h3>
     <p>
         En la primera fase, para cada partido, se sumará 1 punto por cada lado 
-        del resultado acertado, y 3 si se acierta el resultado completo. Además,
-        se darán 2 puntos más por acertar el ganador (o un empate).
+	del marcador acertado, y uno más, hasta un total de 3, si se acierta el
+	marcador completo. Además, se darán 2 puntos por acertar el
+	resultado (victoria del local, visitante o un empate).  
     </p>
     <p>
-        Ej. Si en el España - Rusia un usuario pronosticó un 2-0 y el resultado 
-        real es 2-1, el usuario recibirá 1 punto (por los dos goles de España)
-        más 2 por acertar el ganador. 
-        Sin embargo, si el resultado real fuera 2-0, sumaría 5 puntos en ese partido.
+	Ej. Si en el España - Rusia un usuario pronosticó un 2-0 y el resultado
+	real es 2-1, el usuario recibirá 1 punto (por los dos goles de España)
+	más 2 por acertar el ganador.  Sin embargo, si el resultado real fuera
+	2-0, sumaría 5 puntos en ese partido.
     </p>
     <p>
-        Al final de la primera fase (cuando todos los partidos estén jugados), 
-        se sumarán los puntos relativos a la clasificación de los distintos grupos. 
-        Cada selección correctamente posicionada en su grupo sumará 2 puntos. 
-        Un grupo entero correctamente ordenado sumará un total de 10 puntos.
-        Por acertar uno de los dos equipos que se clasifican, pero desordenado
-        (ej: la apuesta indicaba a un equipo como primero pero quedó segundo),
-        se dará 1 punto. Acertar los dos equipos, pero desordenados, dará 3
-        puntos.
+	Al final de la primera fase (cuando todos los partidos estén jugados),
+	se sumarán los puntos relativos a la clasificación de los distintos
+	grupos.  Cada selección correctamente posicionada en su grupo sumará 2
+	puntos.  Un grupo entero correctamente ordenado sumará un total de 10
+	puntos.  Por acertar uno de los dos equipos que se clasifican, pero
+	desordenado (ej: la apuesta indicaba a un equipo como primero pero
+	quedó segundo), se dará 1 punto. Acertar los dos equipos, pero
+	desordenados, dará 3 puntos.
     </p>
     <p>
-        NOTA: Para determinar el orden de un grupo, se utilizan los criterios de
-        la FIFA. Sin embargo, existe una posibilidad de que dos equipos queden
-        empatados a "todo" al terminar la fase de grupos. En ese caso, la FIFA
-        aplicaría un sorteo para decidir el orden final. Al rellenar la porra no
-        es posible tener en cuenta este caso, por lo que el orden lo determinará
-        el sistema automáticamente, no siendo posible modificarlo.
+	Para determinar el orden de un grupo, se utilizan los criterios de la
+	FIFA. Sin embargo, existe una posibilidad de que dos equipos queden
+	empatados a "todo" al terminar la fase de grupos. En ese caso, la FIFA
+	aplicaría un sorteo para decidir el orden final.  Al rellenar la porra
+	no es posible tener en cuenta este caso, siendo el sistema el que
+	decida de forma arbitraria la clasificación de los equipos implicados.
+	En caso de realizarse algún sorteo, las apuestas que lo contemplaran
+	serán actualizadas automáticamente para reflejar el resultado real, lo
+	que siempre redundará en favor del usuario.
     </p>
     <h3>Fase Final</h3>
     <p>
@@ -217,6 +221,13 @@
     </p>
     <p>
         La cantidad que se debe desembolsar para participar es de 5 &euro;.
+    </p>
+
+    <h2>Acceso al código fuente</h2>
+    <p>
+        Para proporcionar transparencia acerca de la implementación de las
+	reglas descritas en este documento se puede consultar el 
+	<a href="http://github.com/jalopez/conbet_cup">código fuente.</a>
     </p>
 </div>
 {% endblock %}
