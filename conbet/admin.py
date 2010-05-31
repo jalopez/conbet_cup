@@ -45,6 +45,5 @@ class TeamAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
 admin.site.register(Team, TeamAdmin)
-admin.site.register(Qualification)
 admin.site.register(Bet)
 signals.connect()
