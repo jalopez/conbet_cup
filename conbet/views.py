@@ -102,10 +102,6 @@ def results(request):
         'editable': False,
     }, context_instance=RequestContext(request))
 
-def rules(request):
-    return render_to_response('rules.html', {},
-        context_instance=RequestContext(request))
-
 
 def rank_group(request, groupname):
     if not request.user.is_authenticated():

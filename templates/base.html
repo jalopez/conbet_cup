@@ -37,8 +37,7 @@
 <li><a href="{{ results }}">Resultados Reales</a></li>
 {% url conbet.views.bet user.username as my_bet %}
 <li><a href="{{ my_bet }}">Ver mi apuesta</a></li>
-{% url conbet.views.rules as rules %}
-<li><a href="{{ rules }}">Normas</a></li>
+<li><a href="{% url rules %}">Normas</a></li>
 </ul>
  {% block content %}
  {% endblock %}
