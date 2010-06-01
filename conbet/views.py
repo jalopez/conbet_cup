@@ -33,6 +33,8 @@ def ranking(request):
             'position': position,
             'points': points,
             'name': user.username,
+            'firstname': user.first_name,
+            'lastname': user.last_name,
         })
     users = sorted(users, key=lambda x: -x['points'])
 

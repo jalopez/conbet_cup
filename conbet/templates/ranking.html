@@ -16,7 +16,13 @@
         <tr class="{% cycle 'odd' 'even' %}">
             <td>{{ user.position }}</td>
             {% url conbet.views.bet user.name as bet_url %}
-            <td><a href="{{ bet_url }}">{{ user.name }}</a></td>
+            <td><a href="{{ bet_url }}" title="{{ user.lastname }}">
+                {% if user.firstname %}
+                {{ user.firstname }}
+                {% else %}
+                {{ user.name }}
+                {% endif %}
+            </a></td>
             <td>{{ user.points }}</td>
         </tr>
     {% endfor %}
