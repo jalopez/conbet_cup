@@ -4,6 +4,11 @@
 
 {% block script %}
 
+Array.prototype.sum = function(){
+    for(var i=0,sum=0;i<this.length;sum+=this[i++]);
+    return sum;
+}
+
 var qualifications = [
 {% for q in qualifications %}
     {
@@ -186,6 +191,16 @@ function update_rounds() {
     });
 }
 
+function update_points() {
+    $H(points.match_points).each(update_element_points);
+    $H(points.group_points).each(update_element_points);
+}
+function update_element_points(pair) { 
+    var element = pair.key;
+    var points = pair.value;
+    var total_points = points.map(function(el){return el.points}).sum();
+    $(element + "_points").update(total_points);
+}
 
 function init() {
     var groups = [];
@@ -223,6 +238,9 @@ function init() {
         }          
     });
     groups.uniq().each(update_group);
+    {% if points %}
+    update_points();
+    {% endif %}
 }
 
 {% endblock %}
@@ -246,6 +264,7 @@ function init() {
                  </div>
                 {% endfor %}
         </div>
+        <div class="user_points" id="{{ group.name }}_points"></div>
         {% for match in group.matches %}
         {% include "match.html" %}
         {% endfor %}

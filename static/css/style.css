@@ -62,6 +62,7 @@ a:hover {
     border: 1px solid #AAAAAA;
     margin: 3px;
     padding: 1ex;
+    position: relative;
 }
 
 .title {
@@ -144,6 +145,24 @@ a:hover {
     position: relative;
     padding: 10px 0px;
 }
+
+.group > .user_points {
+    position: absolute;
+    color: red;
+    font-weight: bold;
+    right: 10px;
+    top: 25px;
+}
+
+.match .user_points {
+    position: absolute;
+    color: red;
+    font-weight: bold;
+    font-size: 80%;
+    top: 25px;
+    right: 0px;
+}
+
 .match .location, .match .hour {
     font-size: 70%;
     color: #777777;
