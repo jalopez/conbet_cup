@@ -16,27 +16,30 @@ def pre_save_groupmatch(sender, **kwargs):
 
 def post_save_groupmatch(sender, **kwargs):
     instance = kwargs['instance']
-    ranking = settings.RULES.rank_group(
-        instance.group.team_set.all(),
-        instance.group.groupmatch_set.all())
-    for i, team in enumerate(ranking):
-        team.group_order = i + 1
-        team.save()
+    unplayed_matches = instance.group.groupmatch_set.filter(winner__isnull=True)
 
-    for q in Qualification.objects.filter(group=instance.group):
-        round = q.qualify_for
-        team = instance.group.get_position(q.position) 
-        if team:
-            print("%d-th %s qualifies for %s (%s)" % (
-                q.position, q.group,
-                q.qualify_for, q.side,
-            ))
+    if len(unplayed_matches)==0:
+        ranking = settings.RULES.rank_group(
+            instance.group.team_set.all(),
+            instance.group.groupmatch_set.all())
+        for i, team in enumerate(ranking):
+            team.group_order = i + 1
+            team.save()
 
-            if q.side == 'H':
-                round.home = team
-            else:
-                round.visitor = team
-            round.save()
+        for q in Qualification.objects.filter(group=instance.group):
+            round = q.qualify_for
+            team = instance.group.get_position(q.position) 
+            if team:
+                print("%d-th %s qualifies for %s (%s)" % (
+                    q.position, q.group,
+                    q.qualify_for, q.side,
+                ))
+
+                if q.side == 'H':
+                    round.home = team
+                else:
+                    round.visitor = team
+                round.save()
 
 
 def pre_save_round(sender, **kwargs):
@@ -52,20 +55,20 @@ def pre_save_round(sender, **kwargs):
 
 def post_save_round(sender, **kwargs):
     instance = kwargs['instance']
-
-    for q in Qualification.objects.filter(round=instance):
-        round = q.qualify_for
-        team = instance.get_position(q.position) 
-        if team:
-            print("%d-th %s qualifies for %s (%s)" % (
-                q.position, q.round,
-                q.qualify_for, q.side,
-            ))
-            if q.side == 'H':
-                round.home = team
-            else:
-                round.visitor = team
-            round.save()
+    if instance.winner != None:
+        for q in Qualification.objects.filter(round=instance):
+            round = q.qualify_for
+            team = instance.get_position(q.position) 
+            if team:
+                print("%d-th %s qualifies for %s (%s)" % (
+                    q.position, q.round,
+                    q.qualify_for, q.side,
+                ))
+                if q.side == 'H':
+                    round.home = team
+                else:
+                    round.visitor = team
+                round.save()
 
 
 def connect():
