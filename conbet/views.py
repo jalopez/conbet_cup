@@ -94,11 +94,9 @@ def results(request):
 
     return render_to_response('bet.html', {
         'groups': Group.objects.all().order_by('name'),
-        'qualifications': Qualification.objects.all(),
         'teams': Team.objects.all(),
         'bets': Match.objects.all(),
         'rounds': rounds,
-        'valid_goals': range(settings.MAX_GOALS+1),
         'editable': False,
     }, context_instance=RequestContext(request))
 

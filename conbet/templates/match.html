@@ -5,9 +5,9 @@
         
         <div class="location">{{ match.date|date:"H:i" }} {{ match.location|default:"--" }}</div>
         <div class="teams">
-	    <span class="home" id="{{ match.id }}_h_team">{{ match.home|default:"--" }}</span>
+	    <span class="home" id="{{ match.id }}_h_team">{{ match.home|default:"?" }}</span>
 		- 
-            <span class="visitor" id="{{ match.id }}_v_team">{{ match.visitor|default:"--" }}</span>
+            <span class="visitor" id="{{ match.id }}_v_team">{{ match.visitor|default:"?" }}</span>
 	</div>
         <div class="results">
             {% if editable %}

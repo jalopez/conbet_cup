@@ -33,6 +33,9 @@ var bets = {
         'visitor_goals': {{ bet.visitor_goals|default:"0" }},
         'winner': '{{ bet.winner|default:"T" }}'
         {% if bet.match.groupname %}, 'group': '{{ bet.match.groupname }}' {% endif %}
+        {% if not editable and not bet.winner %}
+        , 'pending': true
+        {% endif %}
         
 }{% if not forloop.last %},{% endif %}
 {% endfor %}
@@ -72,7 +75,6 @@ function send() {
     hidden.value = Object.toJSON(bets);
     return true;
 }
-{% endif %}
 function changed(element) {
     var extract_id = new RegExp("\\d+");
     var match_id = extract_id.exec(element.id)[0];
@@ -109,6 +111,7 @@ function changed(element) {
     }
 }
 
+{% endif %}
 var pending_groups = 0;
  
 function update_group(group) {
@@ -199,8 +202,13 @@ function init() {
         $(home_goals_id).value = data.home_goals;
         $(visitor_goals_id).value = data.visitor_goals;
         {% else %}
-        $(home_goals_id).update(data.home_goals);
-        $(visitor_goals_id).update(data.visitor_goals);
+        if (data.pending) {
+            $(home_goals_id).update("--");
+            $(visitor_goals_id).update("--");
+        } else {
+            $(home_goals_id).update(data.home_goals);
+            $(visitor_goals_id).update(data.visitor_goals);
+        }
         {% endif %}
              
         if (data.group == null) {
