@@ -151,11 +151,10 @@ def cache_bet_teams(user):
         group_bets = []
         for match in GroupMatch.objects.filter(group=group):
             bet = get_object_or_404(Bet, match=match, owner=user)
-            result = Result(home=match.home, visitor=match.visitor, 
-                            home_goals=bet.home_goals, 
-                            visitor_goals=bet.visitor_goals, 
-                            winner=bet.winner)
-            group_bets.append(result)
+            bet.home = match.home 
+            bet.visitor = match.visitor
+            bet.save()
+            group_bets.append(bet)
 
         ranking = settings.RULES.rank_group(
             group.team_set.all(),
@@ -219,9 +218,13 @@ def score_bet(user):
                 pass # partial bet
 
         if len(group.groupmatch_set.filter(winner__isnull=True)) == 0:
+            bet_matches = []
+            for match in GroupMatch.objects.filter(group=group):
+                bet_matches.append(Bet.objects.get(match=match,owner=user))
+
             guessed_ranking = settings.RULES.rank_group(
                 group.team_set.all(),
-                GroupMatch.objects.filter(group=group, bet__owner=user),
+                bet_matches,
             )
             ranking = settings.RULES.rank_group(
                 group.team_set.all(),

@@ -80,8 +80,8 @@ class WorldCupScoreRules:
 
         if teams == 2:
             points.append((3, 'group.unordered'))
-        else:
-            points.append((teams, 'group.unordered'))
+        elif teams == 1:
+            points.append((1, 'group.unordered'))
 
         return points
 
