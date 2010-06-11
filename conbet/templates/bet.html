@@ -129,11 +129,15 @@ function update_group(group) {
         
     $H(bets).each(function(pair){ 
         if (pair.value.group==group) {
+            var winner = null;
+            if (!pair.value.pending) {
+                winner = pair.value.winner;
+            }
             group_matches.push({
                                 'id': parseInt(pair.key),
                                 'home_goals': parseInt(pair.value.home_goals),
                                 'visitor_goals': parseInt(pair.value.visitor_goals),
-                                'winner': pair.value.winner
+                                'winner': winner
                                 });
         }
     });
