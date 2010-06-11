@@ -10,6 +10,7 @@ html, body {
 	margin: 1em auto;
 	background-color: white;
 	padding: 1em 2em;
+        position: relative;
 }
 
 #menu {
@@ -51,6 +52,13 @@ a:hover {
     color: red;
     font-size: 110%;
     padding-bottom: 1ex;
+    font-weight: bold;
+}
+#user_name {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #486793;
     font-weight: bold;
 }
 

@@ -261,6 +261,11 @@ function init() {
 Total: {{ total_score }} puntos
 </div>
 {% endif %}
+{% if user %}
+<div id="user_name">
+{% if user.first_name %} {{ user.first_name }} {% else %} {{ user.username }} {% endif %}
+</div>
+{% endif %}
 <div id="group_phase">
 {% for group in groups %}
   <div class="column">
