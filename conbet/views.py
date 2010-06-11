@@ -25,18 +25,18 @@ def ranking(request):
     last_points = None
     for user in User.objects.all():
         points = total_score(user)
-        if points != last_points:
-            last_points = points
-            position += 1
-
         users.append({
-            'position': position,
             'points': points,
             'name': user.username,
             'firstname': user.first_name,
             'lastname': user.last_name,
         })
     users = sorted(users, key=lambda x: -x['points'])
+    for user in users:
+        if user["points"] != last_points:
+            last_points = user["points"]
+            position += 1
+        user["position"] = position
 
     return render_to_response('ranking.html', { 'users': users },
         context_instance=RequestContext(request))
