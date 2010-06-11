@@ -220,7 +220,11 @@ def score_bet(user):
         if len(group.groupmatch_set.filter(winner__isnull=True)) == 0:
             bet_matches = []
             for match in GroupMatch.objects.filter(group=group):
-                bet_matches.append(Bet.objects.get(match=match,owner=user))
+                try:
+                    bet = Bet.objects.get(match=match,owner=user)
+                    bet_matches.append(bet)
+                except Bet.DoesNotExist, e:
+                    pass # partial bet
 
             guessed_ranking = settings.RULES.rank_group(
                 group.team_set.all(),
