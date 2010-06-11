@@ -261,9 +261,9 @@ function init() {
 Total: {{ total_score }} puntos
 {% endif %}
 </div>
-{% if user %}
+{% if bet_user %}
 <div id="user_name">
-{% if user.first_name %} {{ user.first_name }} {% else %} {{ user.username }} {% endif %}
+{% if bet_user.first_name %} {{ bet_user.first_name }} {% else %} {{ bet_user.username }} {% endif %}
 </div>
 {% endif %}
 <div id="group_phase">

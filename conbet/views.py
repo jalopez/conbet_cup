@@ -80,7 +80,7 @@ def bet(request, username, editable=False):
         'editable': editable,
         'points': score_bet(user),
         'total_score': total_score(user),
-        'user': user
+        'bet_user': user
     }, context_instance=RequestContext(request))
 
 
