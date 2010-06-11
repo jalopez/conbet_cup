@@ -256,11 +256,11 @@ function init() {
 
 {% block content %}
 <div id="wrapper">
-{% if not editable and total_score %}
 <div id="total_score">
+{% if not editable and total_score %}
 Total: {{ total_score }} puntos
-</div>
 {% endif %}
+</div>
 {% if user %}
 <div id="user_name">
 {% if user.first_name %} {{ user.first_name }} {% else %} {{ user.username }} {% endif %}
