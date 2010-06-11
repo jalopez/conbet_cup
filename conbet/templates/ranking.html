@@ -3,17 +3,18 @@
 
 {% block content %}
 <div id="wrapper">
-<table id="ranking">
+<table id="ranking" cellspacing="0">
     <thead>
         <tr>
             <th>Posición</th>
             <th>Usuario</th>
             <th>Puntos</th>
+            <th>Premio</th>
         </tr>
     </thead>
     <tbody>
     {% for user in users %}
-        <tr class="{% cycle 'odd' 'even' %}">
+        <tr class="{% cycle 'odd' 'even' %} {{ user.class_name }}">
             <td>{{ user.position }}</td>
             {% url conbet.views.bet user.name as bet_url %}
             <td><a href="{{ bet_url }}" title="{{ user.lastname }}">
@@ -24,6 +25,7 @@
                 {% endif %}
             </a></td>
             <td>{{ user.points }}</td>
+            <td>{{ user.prize|floatformat:2 }} {% if user.prize %} &euro; {% endif %}</td>
         </tr>
     {% endfor %}
     </tbody>

@@ -1,6 +1,8 @@
 from conbet.rules import WorldCupRules
 from conbet.models import Team, GroupMatch
 from django.test import TestCase
+from conbet.prizes import WorldCup2010Prizes
+import math
 
 class WorldCupRulesTest(TestCase):
     def test_rank_by_points(self):
@@ -76,3 +78,190 @@ class WorldCupRulesTest(TestCase):
 #  {"id":2, "home_goals":0, "visitor_goals":0, "winner":"T"}, {"id":5,
 #  "home_goals":5, "visitor_goals":1, "winner":"H"}]
 #  Expected_result: ["mx", "za", "fr", "uy"]
+
+class WorldCup2010PrizesTest(TestCase):
+    def test_one_user_per_prize(self):
+        """ Usual case, one user per prize """
+        prize = WorldCup2010Prizes(5)
+        users = [
+        {
+            'position': 1
+        },
+        {
+            'position': 2
+        },
+        {
+            'position': 3
+        },
+        {
+            'position': 4
+        },
+        {
+            'position': 5
+        },
+        {
+            'position': 6
+        },
+        ]
+        third = math.floor((len(users)-1)*5*0.05)
+        second = math.floor((len(users)-1)*5*0.25)
+        first = (len(users)-1)*5 - second - third*3
+
+        expected_result = [
+        {
+            'position': 1,
+            'prize': first,
+            'class_name': 'first'
+        },
+        {
+            'position': 2,
+            'prize': second,
+            'class_name': 'second'
+        },
+        {
+            'position': 3,
+            'prize': third,
+            'class_name': 'third'
+        },
+        {
+            'position': 4,
+            'prize': third,
+            'class_name': 'third'
+        },
+        {
+            'position': 5,
+            'prize': third,
+            'class_name': 'third'
+        },
+        {
+            'position': 6,
+            'prize': 5,
+            'class_name': 'last'
+        },
+        ]
+        prize.set_prizes(users)
+        self.assertEquals(users, expected_result)
+
+
+    def test_two_first_prizes(self):
+        """ Two users in the first place """
+        prize = WorldCup2010Prizes(5)
+        users = [
+        {
+            'position': 1
+        },
+        {
+            'position': 1
+        },
+        {
+            'position': 2
+        },
+        {
+            'position': 3
+        },
+        {
+            'position': 4
+        },
+        {
+            'position': 5
+        },
+        ]
+        third = float(math.floor((len(users)-1)*5*0.05))
+        second = float(math.floor((len(users)-1)*5*0.25))
+        first = float((len(users)-1)*5 - second - third*3)
+
+        expected_result = [
+        {
+            'position': 1,
+            'prize': (first + second)/2,
+            'class_name': 'first'
+        },
+        {
+            'position': 1,
+            'prize': (first + second)/2,
+            'class_name': 'first'
+        },
+        {
+            'position': 2,
+            'prize': third,
+            'class_name': 'third'
+        },
+        {
+            'position': 3,
+            'prize': third,
+            'class_name': 'third'
+        },
+        {
+            'position': 4,
+            'prize': third,
+            'class_name': 'third'
+        },
+        {
+            'position': 5,
+            'prize': 5,
+            'class_name': 'last'
+        },
+        ]
+        prize.set_prizes(users)
+        self.assertEquals(users, expected_result)
+    def test_two_first_two_second_prizes(self):
+        """ Two users in the first place """
+        prize = WorldCup2010Prizes(5)
+        users = [
+        {
+            'position': 1
+        },
+        {
+            'position': 1
+        },
+        {
+            'position': 2
+        },
+        {
+            'position': 2
+        },
+        {
+            'position': 3
+        },
+        {
+            'position': 4
+        },
+        ]
+        third = float(math.floor((len(users)-1)*5*0.05))
+        second = float(math.floor((len(users)-1)*5*0.25))
+        first = float((len(users)-1)*5 - second - third*3)
+
+        expected_result = [
+        {
+            'position': 1,
+            'prize': (first + second)/2,
+            'class_name': 'first'
+        },
+        {
+            'position': 1,
+            'prize': (first + second)/2,
+            'class_name': 'first'
+        },
+        {
+            'position': 2,
+            'prize': third,
+            'class_name': 'third'
+        },
+        {
+            'position': 2,
+            'prize': third,
+            'class_name': 'third'
+        },
+        {
+            'position': 3,
+            'prize': third,
+            'class_name': 'third'
+        },
+        {
+            'position': 4,
+            'prize': 5,
+            'class_name': 'last'
+        },
+        ]
+        prize.set_prizes(users)
+        self.assertEquals(users, expected_result)

@@ -37,7 +37,8 @@ def ranking(request):
             last_points = user["points"]
             position += 1
         user["position"] = position
-
+    settings.PRIZES.set_prizes(users)
+    
     return render_to_response('ranking.html', { 'users': users },
         context_instance=RequestContext(request))
 

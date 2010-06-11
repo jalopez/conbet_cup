@@ -243,11 +243,25 @@ select {
     margin-bottom: 10px;
 }
 #ranking td {
+    border-bottom: 1px solid #A0B2BE;
     padding: 0.5em;
-}
-#ranking tr.even {
-    background-color: #A0B2BE;
 }
 form#betting {
     text-align: center;
+}
+.first {
+    background-color: #a5f7a5 !important;
+}
+.second {
+    background-color: #ffff99 !important;
+}
+.third {
+    background-color: #f7a6a6 !important;
+}
+.last {
+    background-color: #880000 !important;
+    color: white;
+}
+.last a {
+    color: #cccccc;
 }

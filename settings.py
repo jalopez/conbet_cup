@@ -2,13 +2,16 @@
 
 from conbet.rules  import WorldCupRules as Rules
 from conbet.points import WorldCupScoreRules as ScoreRules
+from conbet.prizes import WorldCup2010Prizes as Prizes
 BETTING = True
 MAX_GOALS = 10
+BET = 5 # euros
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 RULES       = Rules()
 SCORE_RULES = ScoreRules()
+PRIZES = Prizes(BET)
 
 TEMPLATE_DIRS = (
     # '/path/to/conbet_cup/templates',
