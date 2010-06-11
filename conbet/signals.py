@@ -45,7 +45,7 @@ def post_save_groupmatch(sender, **kwargs):
 def pre_save_round(sender, **kwargs):
     instance = kwargs['instance']
     if instance.home_goals != None and instance.visitor_goals != None:
-        if instance.home_goals > instance.visitor_goals:
+        if instance.home_goals > instance.visitor_goals or instance.winner == 'T':
             instance.winner = 'H'
         elif instance.visitor_goals > instance.home_goals:
             instance.winner = 'V'
