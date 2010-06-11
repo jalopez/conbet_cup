@@ -216,6 +216,11 @@ a:hover {
     font-weight: bold;
     padding-top: 5px;
 }
+.match .location {
+    overflow: hidden;
+    height: 17px;
+}
+
 .match .results {
     font-size: 80%;
     position: relative;
