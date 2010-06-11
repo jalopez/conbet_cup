@@ -207,7 +207,7 @@ function update_element_points(pair) {
     var element = pair.key;
     var points = pair.value;
     var total_points = points.map(function(el){return el.points}).sum();
-    $(element + "_points").update(total_points);
+    $(element + "_points").update(total_points + " puntos");
 }
 
 function init() {
@@ -256,6 +256,11 @@ function init() {
 
 {% block content %}
 <div id="wrapper">
+{% if not editable and total_score %}
+<div id="total_score">
+Total: {{ total_score }} puntos
+</div>
+{% endif %}
 <div id="group_phase">
 {% for group in groups %}
   <div class="column">

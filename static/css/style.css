@@ -46,6 +46,14 @@ a:hover {
     clear: both;
 }
 
+#total_score {
+    text-align: center;
+    color: red;
+    font-size: 110%;
+    padding-bottom: 1ex;
+    font-weight: bold;
+}
+
 #group_phase input {
     visibility: hidden;
 }
@@ -155,12 +163,8 @@ a:hover {
 }
 
 .match .user_points {
-    position: absolute;
     color: red;
     font-weight: bold;
-    font-size: 80%;
-    top: 25px;
-    right: 0px;
 }
 
 .match .location, .match .hour {

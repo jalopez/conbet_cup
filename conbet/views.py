@@ -78,6 +78,7 @@ def bet(request, username, editable=False):
         'valid_goals': range(settings.MAX_GOALS+1),
         'editable': editable,
         'points': score_bet(user),
+        'total_score': total_score(user),
     }, context_instance=RequestContext(request))
 
 

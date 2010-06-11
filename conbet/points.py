@@ -57,6 +57,9 @@ class WorldCupScoreRules:
         if bet.winner == match.winner:
             points.append((2, 'match.winner'))
         
+        if len(points) == 0:
+            points.append((0, 'match.none'))
+
         return points
 
 
@@ -117,6 +120,8 @@ class WorldCupScoreRules:
         if guessed_teams == 2 and guessed_goals == 2 and bet.winner == match.winner:
             points.append((factor, 'match.all'))
 
+        if len(points) == 0:
+            points.append((0, 'match.none'))
         return points
     
     def score_cup_winner(self, bet, match):
