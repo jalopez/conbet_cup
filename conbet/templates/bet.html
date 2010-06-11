@@ -36,8 +36,12 @@ var bets = {
 {% endif %}: { 
         'home_goals': {{ bet.home_goals|default:"0" }}, 
         'visitor_goals': {{ bet.visitor_goals|default:"0" }},
-        'winner': '{{ bet.winner|default:"T" }}'
-        {% if bet.match.groupname %}, 'group': '{{ bet.match.groupname }}' {% endif %}
+        {% if bet.match.groupname %}
+            'group': '{{ bet.match.groupname }}',
+            'winner': '{{ bet.winner|default:"T" }}'
+        {% else %}
+            'winner': '{{ bet.winner|default:"H" }}'
+        {% endif %}
         {% if not editable and not bet.winner %}
         , 'pending': true
         {% endif %}
