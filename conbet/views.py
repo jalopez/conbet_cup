@@ -75,6 +75,10 @@ def bet(request, username, editable=False):
         bet, created = Bet.objects.get_or_create(owner=user, match=match)
         bets.append(bet)
 
+    try:
+        total_score = user.cachedranking.total_points 
+    except CachedRanking.DoesNotExist:
+        total_score = 0
     return render_to_response('bet.html', {
         'groups': Group.objects.all().order_by('name'),
         'qualifications': Qualification.objects.all(),
@@ -84,7 +88,7 @@ def bet(request, username, editable=False):
         'valid_goals': range(settings.MAX_GOALS+1),
         'editable': editable,
         'points': score_bet(user),
-        'total_score': total_score(user),
+        'total_score': total_score,
         'bet_user': user
     }, context_instance=RequestContext(request))
 
