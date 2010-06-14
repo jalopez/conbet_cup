@@ -132,3 +132,7 @@ class Qualification(models.Model):
 
     def __unicode__(self):
         return "%s (%s)" % (self.qualify_for.id, self.side)
+
+class CachedRanking(models.Model):
+    user = models.OneToOneField(User)
+    total_points = models.IntegerField(null=True)

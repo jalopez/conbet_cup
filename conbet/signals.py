@@ -1,6 +1,8 @@
 from django.db.models.signals import pre_save, post_save
 from django.conf import settings
-from conbet.models import Qualification, GroupMatch, Round
+from django.contrib.auth.models import User
+from conbet.models import Qualification, GroupMatch, Round, CachedRanking
+from conbet.helpers import total_score
 
 
 def pre_save_groupmatch(sender, **kwargs):
@@ -41,6 +43,8 @@ def post_save_groupmatch(sender, **kwargs):
                     round.visitor = team
                 round.save()
 
+    post_results_changed()
+
 
 def pre_save_round(sender, **kwargs):
     instance = kwargs['instance']
@@ -69,6 +73,15 @@ def post_save_round(sender, **kwargs):
                 else:
                     round.visitor = team
                 round.save()
+    
+    post_results_changed()
+
+
+def post_results_changed():
+    for user in User.objects.all():
+        ranking, created = CachedRanking.objects.get_or_create(user=user)    
+        ranking.total_points = total_score(user)
+        ranking.save()
 
 
 def connect():
