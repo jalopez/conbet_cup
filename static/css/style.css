@@ -13,6 +13,10 @@ html, body {
         position: relative;
 }
 
+#wrapper {
+    overflow: hidden;
+}
+
 #menu {
     text-align: center;
 }
@@ -242,7 +246,7 @@ select {
     font-size: 10px;
 }
 #ranking {
-    width: 100%;
+    width: 65%;
 }
 #ranking th {
     text-align: left;
@@ -272,4 +276,7 @@ form#betting {
 }
 .last a {
     color: #cccccc;
+}
+#twitter_box {
+    float: right;
 }

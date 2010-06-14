@@ -1,8 +1,27 @@
 {% extends "base.html" %}
 {% load filters %}
+{% block script %}
+</script>
+<script type="text/javascript" src="http://twitstat.us/twitstat.us-min.js"></script>
+<script type="text/javascript">
+    twitstat.badge.init({
+        badge_container: "twitter_box",
+        title: "#ConbetCup en Twitter",
+        keywords: "#conbetcup",
+        max: 7,
+        border_color: "#486793",
+        header_background: "#486793",
+        header_font_color: "#ffffff",
+        content_background_color: "#e1e1e1",
+        content_font_color: "#333333",
+        link_color: "#307ace",
+        width: 250
+    });
+{% endblock %}
 
 {% block content %}
 <div id="wrapper">
+<div class="twitstatus_badge_container" id="twitter_box"></div>
 <table id="ranking" cellspacing="0">
     <thead>
         <tr>
