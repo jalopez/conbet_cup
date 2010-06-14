@@ -258,6 +258,9 @@ select {
     border-bottom: 1px solid #A0B2BE;
     padding: 0.5em;
 }
+a.me {
+    color: red;
+}
 form#betting {
     text-align: center;
 }
@@ -275,7 +278,7 @@ form#betting {
     color: white;
 }
 .last a {
-    color: #cccccc;
+    color: #cccccc !important;
 }
 #twitter_box {
     float: right;

@@ -32,19 +32,21 @@
         </tr>
     </thead>
     <tbody>
-    {% for user in users %}
-        <tr class="{% cycle 'odd' 'even' %} {{ user.class_name }}">
-            <td>{{ user.position }}</td>
-            {% url conbet.views.bet user.name as bet_url %}
-            <td><a href="{{ bet_url }}" title="{{ user.lastname }}">
-                {% if user.firstname %}
-                {{ user.firstname }}
+    {% for u in users %}
+        <tr class="{% cycle 'odd' 'even' %} {{ u.class_name }}">
+            <td>{{ u.position }}</td>
+            {% url conbet.views.bet u.name as bet_url %}
+            <td><a
+                {% ifequal user.username u.name %}class="me"{% endifequal %}
+                href="{{ bet_url }}" title="{{ u.lastname }}">
+                {% if u.firstname %}
+                {{ u.firstname }}
                 {% else %}
-                {{ user.name }}
+                {{ u.name }}
                 {% endif %}
             </a></td>
-            <td>{{ user.points }}</td>
-            <td>{{ user.prize|floatformat:2 }} {% if user.prize %} &euro; {% endif %}</td>
+            <td>{{ u.points }}</td>
+            <td>{{ u.prize|floatformat:2 }} {% if u.prize %} &euro; {% endif %}</td>
         </tr>
     {% endfor %}
     </tbody>
