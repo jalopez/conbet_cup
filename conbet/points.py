@@ -126,9 +126,6 @@ class WorldCupScoreRules:
     
     def score_cup_winner(self, bet, match):
         points = []
-        if bet.winner == match.winner:
-            if match.winner == 'H' and bet.home_team == match.home_team:
-                points.append((20, 'cup.winner'))
-            if match.winner == 'V' and bet.visitor_team == match.visitor_team: 
+        if match.winner_team() != None and bet.winner_team() == match.winner_team():
                 points.append((20, 'cup.winner'))
         return points

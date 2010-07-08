@@ -130,7 +130,8 @@ def score_bet(user):
     try:
         final = Round.objects.get(stage=1,order=1)
         bet = Bet.objects.get(owner=user, match=final)
-        match_points += map(lambda x: ('winner', x[0], x[1]),
+        if final.winner != None:
+            match_points += map(lambda x: (final.id, x[0], x[1]),
                             sr.score_cup_winner(bet, final))
     except Bet.DoesNotExist, Round.DoesNotExist:
         pass
