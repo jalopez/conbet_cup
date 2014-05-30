@@ -3,7 +3,7 @@
 {% block content %}
 <div id="wrapper">
 {% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
+<p>Tu usuario y password no coinciden, por favor inténtalo de nuevo.</p>
 {% endif %}
 
 <form method="post" action="{% url django.contrib.auth.views.login %}">

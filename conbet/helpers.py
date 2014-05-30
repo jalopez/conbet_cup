@@ -3,6 +3,8 @@
 from conbet.models import Match, Bet, GroupMatch, Round, Group, Qualification, Result, Team
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.shortcuts import get_object_or_404
+import json
 
 def update_bet(request):
     bet_info = json.loads(request.POST.get('bets'))
