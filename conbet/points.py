@@ -79,14 +79,33 @@ class WorldCupScoreRules:
             points.append((matches*2, 'group.team'))
 
         # unordered qualifyed teams
-        teams = unordered_qualifying_teams(bet_ranking, ranking)
+        #teams = unordered_qualifying_teams(bet_ranking, ranking)
 
-        if teams == 2:
-            points.append((3, 'group.unordered'))
-        elif teams == 1:
-            points.append((1, 'group.unordered'))
+        #if teams == 2:
+        #    points.append((3, 'group.unordered'))
+        #elif teams == 1:
+        #    points.append((1, 'group.unordered'))
 
         return points
+
+    def score_teams_round(self, stage, bet_teams, teams):
+        """
+        Score guessed teams in a given round
+
+        punctuation = [(<points>, <reason>)]
+        """
+        factor = 6 - stage
+
+        set_teams = set(teams)
+        guessed_teams_len = len([x for x in bet_teams if x in set_teams])
+
+        points = guessed_teams_len * factor
+
+        if guessed_teams_len == len(teams):
+            points += factor
+
+        return [(points, 'round.teams')]
+
 
     def score_round(self, bet, match):
         """

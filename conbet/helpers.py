@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 import json
+import itertools
 
 def update_bet(request):
     bet_info = json.loads(request.POST.get('bets'))
@@ -90,6 +91,7 @@ def score_bet(user):
     sr = settings.SCORE_RULES
     match_points = []
     group_points = []
+    round_points = []
     for group in Group.objects.all():
         played_matches = group.groupmatch_set.filter(winner__isnull=False)
         for groupmatch in played_matches:
@@ -120,13 +122,25 @@ def score_bet(user):
             group_points += map(lambda x: (group.name, x[0], x[1]),
                 sr.score_group_classification(guessed_ranking, ranking))
 
-    for round in Round.objects.filter(winner__isnull=False):
+    for round_match in Round.objects.filter(winner__isnull=False):
         try:
-            bet = Bet.objects.get(owner=user, match=round)
-            match_points += map(lambda x: (round.id, x[0], x[1]),
-                                sr.score_round(bet, round))
+            bet = Bet.objects.get(owner=user, match=round_match)
+            match_points += map(lambda x: (round_match.id, x[0], x[1]),
+                                sr.score_round(bet, round_match))
         except Bet.DoesNotExist:
             pass # partial bet
+
+    for stage in [x['stage'] for x in Round.objects.filter(winner__isnull=False).values('stage').distinct()]:
+        round_matches = [[x.home, x.visitor] for x in Round.objects.filter(stage=stage)]
+        round_teams = [x for x in itertools.chain.from_iterable(round_matches) if x is not None]
+
+        # If all teams are available in the round
+        if len(round_teams) == (len(round_matches) * 2):
+            guessed_matches = [[x.home, x.visitor] for x in Bet.objects.filter(owner=user, match__round__stage=stage)]
+            guessed_teams = [x for x in itertools.chain.from_iterable(guessed_matches)]
+
+            round_points += map(lambda x: (stage, x[0], x[1]), sr.score_teams_round(stage, guessed_teams, round_teams))
+
     
     # The final
     try:
@@ -139,13 +153,14 @@ def score_bet(user):
         pass
 
     return { 'match_points': group_list(match_points),
-             'group_points': group_list(group_points), }
+             'group_points': group_list(group_points),
+             'round_points': group_list(round_points)}
 
 
 def total_score(user):
     bet = score_bet(user)
     total_score = 0
-    for scores in bet['match_points'].values() + bet['group_points'].values():
+    for scores in bet['match_points'].values() + bet['group_points'].values() + bet['round_points'].values():
         for score in scores:
             total_score += score[0]
     return total_score

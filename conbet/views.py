@@ -68,6 +68,7 @@ def bet(request, username, editable=False):
         rounds.append([
             Round.STAGE_NAMES[stage],
             Round.objects.filter(stage=stage).order_by('order'),
+            stage
             ])
 
     bets = []
