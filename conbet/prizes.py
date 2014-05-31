@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import math
 
-class WorldCup2010Prizes:
+class WorldCupPrizes:
     """
-    Prizes for the World Cup 2010.
+    Prizes for the World Cup
 
     """
     def __init__(self, bet_price):

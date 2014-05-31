@@ -142,7 +142,7 @@ a:hover {
     padding: 20px;
     border: 1px solid #AAAAAA;
     margin-bottom: 10px;
-
+    position: relative;
 }
 .wrap {
     margin: 0px auto;
@@ -166,7 +166,8 @@ a:hover {
     padding: 10px 0px;
 }
 
-.group > .user_points {
+.group > .user_points,
+.round > .user_points {
     position: absolute;
     color: red;
     font-weight: bold;
@@ -246,7 +247,7 @@ select {
     font-size: 10px;
 }
 #ranking {
-    width: 65%;
+    width: 100%;
 }
 #ranking th {
     text-align: left;

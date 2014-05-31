@@ -74,6 +74,18 @@ var points = {
     {% endfor %}
     ]{% if not forloop.last %},{% endif %}
 {% endfor %}
+    },
+
+    'round_points': {
+{% for round in points.round_points.items  %}
+    'round_{{ round.0 }}': [
+        {% for points in round.1 %}
+        { 'points' : {{ points.0 }},
+          'reason' : "{{ points.1 }}"
+        }
+        {%  endfor %}
+        ]{% if not forloop.last %},{% endif %}
+{% endfor %}
     }
 };
 {% endif %} 
@@ -202,6 +214,7 @@ function update_rounds() {
 function update_points() {
     $H(points.match_points).each(update_element_points);
     $H(points.group_points).each(update_element_points);
+    $H(points.round_points).each(update_element_points);
 }
 function update_element_points(pair) { 
     var element = pair.key;
@@ -295,6 +308,7 @@ Total: {{ total_score }} puntos
 {% for round in rounds %}
   <div class="round">
         <div class="title">{{ round.0 }}</div>
+        <div class="user_points" id="round_{{ round.2 }}_points"></div>
         <div class="wrap r{{ round.1|length }}">
         {% for match in round.1 %}
         {% include "match.html" %}
