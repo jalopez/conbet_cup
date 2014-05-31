@@ -130,27 +130,45 @@ def score_bet(user):
         except Bet.DoesNotExist:
             pass # partial bet
 
-    for stage in [x['stage'] for x in Round.objects.filter(winner__isnull=False).values('stage').distinct()]:
-        round_matches = [[x.home, x.visitor] for x in Round.objects.filter(stage=stage)]
-        round_teams = [x for x in itertools.chain.from_iterable(round_matches) if x is not None]
+    # All rounds except final
+    for stage in [x['stage'] for x in
+                  Round.objects.filter(home__isnull=False).filter(visitor__isnull=False)
+                  .values('stage').distinct() if x != 1]:
 
-        # If all teams are available in the round
-        if len(round_teams) == (len(round_matches) * 2):
-            guessed_matches = [[x.home, x.visitor] for x in Bet.objects.filter(owner=user, match__round__stage=stage)]
-            guessed_teams = [x for x in itertools.chain.from_iterable(guessed_matches)]
+        try:
+            round_matches = [[x.home, x.visitor] for x in Round.objects.filter(stage=stage)]
+            round_teams = [x for x in itertools.chain.from_iterable(round_matches) if x is not None]
 
-            round_points += map(lambda x: (stage, x[0], x[1]), sr.score_teams_round(stage, guessed_teams, round_teams))
+            # If all teams are available in the round
+            if len(round_teams) == (len(round_matches) * 2):
+                guessed_matches = [[x.home, x.visitor] for x in Bet.objects.filter(owner=user, match__round__stage=stage)]
+                guessed_teams = [x for x in itertools.chain.from_iterable(guessed_matches)]
 
+                round_points += map(lambda x: (stage, x[0], x[1]), sr.score_teams_round(stage, guessed_teams, round_teams))
+        except Bet.DoesNotExist:
+            pass
     
     # The final
     try:
         final = Round.objects.get(stage=1,order=1)
         bet = Bet.objects.get(owner=user, match=final)
-        if final.winner != None:
+        if final.winner is not None:
             match_points += map(lambda x: (final.id, x[0], x[1]),
                             sr.score_cup_winner(bet, final))
     except Bet.DoesNotExist, Round.DoesNotExist:
         pass
+
+    # 3rd and 4th
+    try:
+        match_3rd = Round.objects.get(stage=1, order=2)
+        bet_3rd = Bet.objects.get(owner=user, match=match_3rd)
+    except Bet.DoesNotExist, Round.DoesNotExist:
+        pass
+
+    if match_is_filled(final) and match_is_filled(match_3rd):
+        round_points += map(lambda x: (1, x[0], x[1]),
+                            sr.score_teams_final(bet, final, bet_3rd, match_3rd))
+
 
     return { 'match_points': group_list(match_points),
              'group_points': group_list(group_points),
@@ -164,3 +182,7 @@ def total_score(user):
         for score in scores:
             total_score += score[0]
     return total_score
+
+
+def match_is_filled(match):
+    return match is not None and match.home is not None and match.visitor is not None

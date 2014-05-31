@@ -94,7 +94,11 @@ class WorldCupScoreRules:
 
         punctuation = [(<points>, <reason>)]
         """
-        factor = 6 - stage
+
+        if stage == 1: # Final, resolved in score_teams_final
+            return []
+
+        factor = (5 - stage) * 3
 
         set_teams = set(teams)
         guessed_teams_len = len([x for x in bet_teams if x in set_teams])
@@ -103,6 +107,26 @@ class WorldCupScoreRules:
 
         if guessed_teams_len == len(teams):
             points += factor
+
+        return [(points, 'round.teams')]
+
+    def score_teams_final(self, bet_final, match_final, bet_3rd, match_3rd):
+        points = 0
+
+        if bet_final.home == match_final.home or bet_final.home == match_final.visitor:
+            points += 12
+
+        if bet_final.visitor == match_final.home or bet_final.visitor == match_final.visitor:
+            points += 12
+
+        if bet_3rd.home == match_3rd.home or bet_3rd.home == match_3rd.visitor:
+            points += 12
+
+        if bet_3rd.visitor == match_3rd.home or bet_3rd.visitor == match_3rd.visitor:
+            points += 12
+
+        if points == 48:
+            points += 12
 
         return [(points, 'round.teams')]
 
@@ -120,13 +144,13 @@ class WorldCupScoreRules:
         # goals
         guessed_goals = same_goals(bet, match)
         if guessed_goals == 2:
-            points.append((factor * 3, 'match.goals'))
+            points.append((3, 'match.goals'))
         elif guessed_goals == 1:
-            points.append((factor, 'match.goals'))
-        
+            points.append((1, 'match.goals'))
+
         # winner
         if bet.winner == match.winner:
-            points.append((factor, 'match.winner'))
+            points.append((1, 'match.winner'))
 
         # teams
         guessed_teams = same_teams(bet, match)
@@ -137,7 +161,7 @@ class WorldCupScoreRules:
 
         # all together
         if guessed_teams == 2 and guessed_goals == 2 and bet.winner == match.winner:
-            points.append((factor, 'match.all'))
+            points.append((factor * 2, 'match.all'))
 
         if len(points) == 0:
             points.append((0, 'match.none'))
@@ -146,5 +170,5 @@ class WorldCupScoreRules:
     def score_cup_winner(self, bet, match):
         points = []
         if match.winner_team() != None and bet.winner_team() == match.winner_team():
-                points.append((20, 'cup.winner'))
+                points.append((40, 'cup.winner'))
         return points

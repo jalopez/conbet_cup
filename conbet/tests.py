@@ -1,7 +1,7 @@
 from conbet.rules import WorldCupRules
 from conbet.models import Team, GroupMatch
 from django.test import TestCase
-from conbet.prizes import WorldCup2010Prizes
+from conbet.prizes import WorldCupPrizes
 import math
 
 class WorldCupRulesTest(TestCase):
@@ -79,10 +79,10 @@ class WorldCupRulesTest(TestCase):
 #  "home_goals":5, "visitor_goals":1, "winner":"H"}]
 #  Expected_result: ["mx", "za", "fr", "uy"]
 
-class WorldCup2010PrizesTest(TestCase):
+class WorldCupPrizesTest(TestCase):
     def test_one_user_per_prize(self):
         """ Usual case, one user per prize """
-        prize = WorldCup2010Prizes(5)
+        prize = WorldCupPrizes(5)
         users = [
         {
             'position': 1
@@ -145,7 +145,7 @@ class WorldCup2010PrizesTest(TestCase):
 
     def test_two_first_prizes(self):
         """ Two users in the first place """
-        prize = WorldCup2010Prizes(5)
+        prize = WorldCupPrizes(5)
         users = [
         {
             'position': 1
@@ -206,7 +206,7 @@ class WorldCup2010PrizesTest(TestCase):
         self.assertEquals(users, expected_result)
     def test_two_first_two_second_prizes(self):
         """ Two users in the first place """
-        prize = WorldCup2010Prizes(5)
+        prize = WorldCupPrizes(5)
         users = [
         {
             'position': 1

@@ -84,7 +84,7 @@ var points = {
           'reason' : "{{ points.1 }}"
         }
         {%  endfor %}
-        ]
+        ]{% if not forloop.last %},{% endif %}
 {% endfor %}
     }
 };
