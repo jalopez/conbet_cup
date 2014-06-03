@@ -139,7 +139,7 @@ class WorldCupScoreRules:
         """
         
         points = []
-        factor = 6 - match.stage
+        factor = 5 - match.stage
 
         # goals
         guessed_goals = same_goals(bet, match)
@@ -155,9 +155,9 @@ class WorldCupScoreRules:
         # teams
         guessed_teams = same_teams(bet, match)
         if guessed_teams == 2:
-            points.append((factor * 3, 'match.teams'))
+            points.append((3, 'match.teams'))
         elif guessed_teams == 1:
-            points.append((factor, 'match.teams'))
+            points.append((1, 'match.teams'))
 
         # all together
         if guessed_teams == 2 and guessed_goals == 2 and bet.winner == match.winner:
