@@ -10,7 +10,7 @@ function init() {}
     <thead>
         <tr>
             <th>Posición</th>
-            <th>Usuario</th>
+            <th>Nombre</th>
             <th>Puntos</th>
             <th>Premio</th>
         </tr>
@@ -22,9 +22,9 @@ function init() {}
             {% url conbet.views.bet u.name as bet_url %}
             <td><a
                 {% ifequal user.username u.name %}class="me"{% endifequal %}
-                href="{{ bet_url }}" title="{{ u.lastname }}">
+                href="{{ bet_url }}">
                 {% if u.firstname %}
-                {{ u.firstname }}
+                {{ u.firstname }} {{ u.lastname }}
                 {% else %}
                 {{ u.name }}
                 {% endif %}
