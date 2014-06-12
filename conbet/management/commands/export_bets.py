@@ -11,7 +11,7 @@ class Command(BaseCommand):
     help='Export all bets in a CSV file'
     args='out_file'
 
-    field_names = ['Usuario', 'Partido', 'Equipo Casa', 'Equpo Visitante', 'Goles 1', 'Goles Visitante', 'Ganador']
+    field_names = ['Usuario', 'Partido', 'Equipo Casa', 'Equpo Visitante', 'Goles Casa', 'Goles Visitante', 'Ganador']
     
     def handle(self, *args, **options):
         if not args:
@@ -29,11 +29,11 @@ class Command(BaseCommand):
                         else:
                             match = bet.match.round_obj()
 
-                        home = bet.match.home
-                        visitor = bet.match.visitor
-                        home_goals = bet.match.home_goals
-                        visitor_goals = bet.match.visitor_goals
-                        winner = bet.match.winner
+                        home = bet.home
+                        visitor = bet.visitor
+                        home_goals = bet.home_goals
+                        visitor_goals = bet.visitor_goals
+                        winner = bet.winner
 
                         if winner == 'H':
                             winner = home
